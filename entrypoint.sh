@@ -24,13 +24,13 @@ echo "root:${ROOT_PASS}" | chpasswd 2>/dev/null || true
 log "➡️ Root password set"
 
 # ---- Fix Nginx config with correct PORT ----
-cat > /etc/nginx/sites-available/ollama << EOF
+cat > /etc/nginx/sites-available/web << EOF
 server {
     listen ${PORT};
     server_name _;
     client_max_body_size 10M;
     location / {
-        root /var/www/ollama-ui;
+        root /var/www/web-ui;
         index index.html;
         try_files \$uri \$uri/ /index.html;
     }

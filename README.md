@@ -134,7 +134,7 @@ rairu-kun2/
 ├── supervisord.conf           # Process manager (systemd alternative)
 ├── zrok-setup.sh              # zrok enable + tunnel manager + ntfy
 ├── watchdog.sh                # Service watchdog (SSH, Nginx)
-├── nginx-ollama.conf          # Nginx config web UI
+├── nginx-web.conf              # Nginx config web UI
 ├── index.html                 # DevCulture Web UI
 ├── devculture-banner.sh       # SSH login banner
 ├── render.yaml                # Render deploy config
@@ -177,7 +177,7 @@ rairu-kun2/
 
 - **zrok WAJIB** didaftarkan dulu di https://myzrok.io
 - Satu akun zrok free bisa bikin banyak token
-- **TIDAK pakai Ollama** — pure VPS + SSH + tunnel
+- **Tunnel murni** — VPS + SSH + tunnel, clean tanpa AI
 - Semua service auto-restart via supervisord & watchdog
 - Notifikasi dikirim ke ntfy.sh/zrokIP22
 
@@ -187,7 +187,7 @@ rairu-kun2/
 
 **Dibuat dengan ❤️ oleh [DevCulture](https://github.com/clickmamaheti-prog)**
 
-*Premium VPS via zrok · No Ollama · Supervisord Powered*
+*Premium VPS via zrok · Supervisord Powered*
 
 ⭐ **Star repo ini jika membantu!** ⭐
 

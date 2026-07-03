@@ -48,12 +48,12 @@ RUN mkdir -p /run/sshd && \
       /etc/ssh/sshd_config
 
 RUN rm -f /etc/nginx/sites-enabled/default
-COPY nginx-ollama.conf /etc/nginx/sites-available/ollama
-RUN ln -sf /etc/nginx/sites-available/ollama /etc/nginx/sites-enabled/ollama
+COPY nginx-web.conf /etc/nginx/sites-available/web
+RUN ln -sf /etc/nginx/sites-available/web /etc/nginx/sites-enabled/web
 
-RUN mkdir -p /var/www/ollama-ui
-COPY index.html /var/www/ollama-ui/index.html
-RUN chmod -R 755 /var/www/ollama-ui
+RUN mkdir -p /var/www/web-ui
+COPY index.html /var/www/web-ui/index.html
+RUN chmod -R 755 /var/www/web-ui
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

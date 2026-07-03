@@ -2,7 +2,7 @@ services:
   - type: web
     name: Rairu-Kun2
     env: docker
-    repo: https://github.com/clickmamaheti-prog/rairu-kun2
+    repo: https://github.com/clickmamaheti-prog/free-vpsxxx
     region: singapore
     plan: free
     healthCheckPath: /health

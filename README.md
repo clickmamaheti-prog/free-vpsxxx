@@ -1,58 +1,198 @@
-# FREE VPS LIFETIME!!!
+<div align="center">
 
-### Specification 
-1. 7 GB of RAM 💽
-2. 1.2 TB Storage 💾
-3. Up to 100Gbps of speed 🚀
-4. 69 Core CPU 🚥
-5. Google Cloud Technology 🌐
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║    ██████╗  █████╗ ██╗██████╗ ██╗   ██╗   ██╗  ██╗██╗   ██╗███╗   ██╗ ║
+║    ██╔══██╗██╔══██╗██║██╔══██╗██║   ██║   ██║ ██╔╝██║   ██║████╗  ██║ ║
+║    ██████╔╝███████║██║██║  ██║██║   ██║   █████╔╝ ██║   ██║██╔██╗ ██║ ║
+║    ██╔══██╗██╔══██║██║██║  ██║██║   ██║   ██╔═██╗ ██║   ██║██║╚██╗██║ ║
+║    ██║  ██║██║  ██║██║██████╔╝╚██████╔╝██╗██║  ██╗╚██████╔╝██║ ╚████║ ║
+║    ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ║
+║                                                              ║
+║              ★  RAIRU-KUN2 PREMIUM VPS  ★                   ║
+╚═══════════════════════════════════════════════════════════════╝
+              powered by: DevCulture ©2026 linux
+```
 
-### Deploy Tutorial for Railway
+# Rairu-Kun2 — Premium SSH VPS via zrok Tunnel
 
-1. Create [Railway Account](https://railway.app?referralCode=dG01iI) account or use an existing account.
+**Ubuntu 20.04 · zrok Zero-Trust Tunnel · Multi-Port · Railway · ntfy Premium**
 
-2. Create [Ngrok Account](https://dashboard.ngrok.com/).
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new)
+[![Deploy on Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
-3. Get [Ngrok Token](https://dashboard.ngrok.com/auth) click the `Authtoken`.
+![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04_LTS-E95420?logo=ubuntu&logoColor=white)
+![zrok](https://img.shields.io/badge/zrok-Tunnel-00e5ff?logo=ziti&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-00e5ff)
 
-ps: One ngrok account can only use 1 active agent, if you want to run multiple agents you have upgrade your account.
+</div>
 
-## Time to Deploy!!!
+---
 
-Click the Railway button at the Below 
+## ✨ Fitur Premium
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/BzFWCH?referralCode=dG01iI)
+| Fitur | Keterangan |
+|-------|-----------|
+| 🖥 **Ubuntu 20.04 LTS** | OS premium, stabil dan ringan |
+| 🔑 **SSH via zrok** | Zero-trust tunnel — lebih aman dari bore/ngrok |
+| 🔐 **Supervisord** | Systemd alternative — auto-restart semua service |
+| 🌐 **Web UI Premium** | Dashboard dengan tema gelap DevCulture |
+| 📲 **ntfy Premium** | Notifikasi SSH URL + status periodik (topic: `zrokIP22`) |
+| 🔄 **zrok Tunnel** | Auto-restart jika tunnel mati |
+| 🐳 **Docker Ready** | Deploy ke Railway, Render, Fly.io, atau VPS |
+| 🆓 **100% Gratis** | Railway $5/bulan credit, semua tools gratis |
 
-Fill the `NGROK_TOKEN` with your Token.
+---
 
-`PORT` default port is 22.
+## 🚀 Deploy ke Railway
 
-`REGION` default Region is ap, But you can also change to the nearest server.
+### 1. Fork repo ini
+### 2. Buat project di [railway.app](https://railway.app)
+New Project → Deploy from GitHub → pilih repo ini
 
-## Bahasa Indonesia 🇮🇩
+### 3. Set Environment Variables
 
-### VPS Gratis SEUMUR HIDUP!!!
+| Variable | Wajib? | Default | Deskripsi |
+|----------|--------|---------|-----------|
+| `ZROK_TOKEN` | **⚠️ Wajib** | - | Token dari [myzrok.io](https://myzrok.io) |
+| `ROOT_PASS` | Opsional | `DevCulture2026` | Password SSH root |
+| `NTFY_TOPIC` | Opsional | `zrokIP22` | Topic ntfy untuk notifikasi |
+| `TZ` | Opsional | `Asia/Jakarta` | Timezone |
+| `PORT` | Opsional | `8080` | Port web UI |
 
-### Tutorial Deploy VPS
-1. Buat [Akun Railway](https://railway.app?referralCode=dG01iI) atau gunakan akun yang ada.
+### 4. Daftar zrok
+1. Buka https://myzrok.io
+2. Register (gratis)
+3. Dapatkan token → set sebagai `ZROK_TOKEN`
 
-2. Buat atau login ke [Akun Ngrok](https://dashboard.ngrok.com/).
+### 5. Subscribe ntfy di HP (untuk notifikasi)
+```
+ntfy.sh/zrokIP22
+```
 
-3. Dapatkan [Token Ngrok](https://dashboard.ngrok.com/auth) salin 'Authtoken'
+---
 
-ps: Satu akun ngrok hanya dapat menggunakan 1 agen aktif, jika Anda ingin menjalankan beberapa agen, Anda harus mengupgrade akun Anda.
+## 🔐 Cara Akses SSH
 
-## Waktunya Deploy 🔥
-Klik tombol dibawah ini ⬇️
+Karena zrok menggunakan **private tunnel** untuk SSH, kamu perlu:
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/BzFWCH?referralCode=dG01iI)
+### Install zrok client (sekali saja)
+```bash
+# Linux
+curl -fsSL https://github.com/openziti/zrok/releases/latest/download/zrok_0.4.30_linux_amd64.tar.gz \
+  | tar -xz -C /usr/local/bin/ zrok
 
-Isi ```NGROK_TOKEN``` dengan Tokenmu.
+# macOS
+brew install zrok
+```
 
-Isi `PORT` port bawaan 22.
+### Akses SSH tunnel
+```bash
+# Buka tunnel ke localhost:2222
+zrok access private <TOKEN> --bind 127.0.0.1:2222
 
-Isi `REGION` Region bawaan ap, tapi kamu juga bisa mengubah ke server terdekat.
+# SSH dari terminal lain
+ssh root@127.0.0.1 -p 2222
+```
 
-## Enjoy the vps? Let's Treat the author to coffee ☕
+> **TOKEN** dapat dilihat di notifikasi ntfy (`zrokIP22`) atau di log container.
 
-paypal: https://paypal.me/dedeklender
+---
+
+## 🌐 Akses Web
+
+zrok juga membuka **public tunnel** ke port 80 (Web UI) dan port 8080 (App):
+```
+https://xxxxx.zrok.io
+```
+URL akan muncul di notifikasi ntfy.
+
+---
+
+## 📲 Notifikasi ntfy
+
+Semua notifikasi dikirim ke topic **`zrokIP22`**:
+
+| Event | Notifikasi |
+|-------|-----------|
+| ⚡ VPS Online | SSH token + Web URL + password |
+| 📊 Status (5 menit) | Uptime, RAM, Disk, Token SSH |
+| 🚨 Tunnel Restart | Alert jika tunnel mati |
+
+Subscribe: [ntfy.sh/zrokIP22](https://ntfy.sh/zrokIP22)
+
+---
+
+## 🏗 Struktur Proyek
+
+```
+rairu-kun2/
+├── Dockerfile                 # Ubuntu 20.04 + zrok + supervisord
+├── entrypoint.sh              # Startup config + supervisord
+├── supervisord.conf           # Process manager (systemd alternative)
+├── zrok-setup.sh              # zrok enable + tunnel manager + ntfy
+├── watchdog.sh                # Service watchdog (SSH, Nginx)
+├── nginx-ollama.conf          # Nginx config web UI
+├── index.html                 # DevCulture Web UI
+├── devculture-banner.sh       # SSH login banner
+├── render.yaml                # Render deploy config
+├── railway.json               # Railway deploy config
+├── fly.toml                   # Fly.io deploy config
+└── .github/workflows/
+    └── railway-deploy.yml     # Auto-deploy CI/CD
+```
+
+---
+
+## ⚙️ System Architecture
+
+```
+┌──────────────────────────────────┐
+│         Supervisord              │
+│  (systemd alternative)           │
+├──────────────────────────────────┤
+│  ┌──────┐ ┌──────┐ ┌──────────┐  │
+│  │ SSH  │ │Nginx │ │ zrok     │  │
+│  │sshd -D│ │:PORT│ │ Tunnel   │  │
+│  └──────┘ └──────┘ │ Manager  │  │
+│                    └──────────┘  │
+│  ┌────────────────────────────┐  │
+│  │ Watchdog                    │  │
+│  │ (auto-restart dead services)│  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+         │
+    ┌────┴────┐
+    │  zrok   │ ← Zero-trust tunnel
+    │  Cloud  │
+    └─────────┘
+    SSH / HTTPS
+```
+
+---
+
+## ⚠️ Catatan Penting
+
+- **zrok WAJIB** didaftarkan dulu di https://myzrok.io
+- Satu akun zrok free bisa bikin banyak token
+- **TIDAK pakai Ollama** — pure VPS + SSH + tunnel
+- Semua service auto-restart via supervisord & watchdog
+- Notifikasi dikirim ke ntfy.sh/zrokIP22
+
+---
+
+<div align="center">
+
+**Dibuat dengan ❤️ oleh [DevCulture](https://github.com/clickmamaheti-prog)**
+
+*Premium VPS via zrok · No Ollama · Supervisord Powered*
+
+⭐ **Star repo ini jika membantu!** ⭐
+
+```
+powered by: DevCulture ©2026 linux
+```
+
+</div>

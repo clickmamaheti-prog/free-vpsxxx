@@ -1,0 +1,34 @@
+app = "rairu-kun2"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  NTFY_TOPIC = "zrokIP22"
+  TZ = "Asia/Jakarta"
+
+[[services]]
+  processes = ["app"]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [services.concurrency]
+    type = "tcp"
+    hard_limit = 50
+    soft_limit = 25
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls"]
+    port = 443
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "5s"
+    unhealthy_threshold = 3
+    healthy_threshold = 2

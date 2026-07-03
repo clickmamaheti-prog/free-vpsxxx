@@ -1,16 +1,19 @@
 services:
-  # A Docker web service
   - type: web
-    name: Ngrok
+    name: Rairu-Kun2
     env: docker
-    repo: https://github.com/craxid/rairu-kun # optional
-    region: Singapore # optional (defaults to Singapore)
-    plan: free # optional (defaults to starter)
-    healthCheckPath: /
+    repo: https://github.com/clickmamaheti-prog/rairu-kun2
+    region: singapore
+    plan: free
+    healthCheckPath: /health
     envVars:
-      - key: PORT # ngrok port
-        value: 22
-      - key: NGROK_TOKEN # ngrok token
+      - key: PORT
+        value: 8080
+      - key: ZROK_TOKEN
         sync: false
-      - key: REGION # ngrok region
+      - key: ROOT_PASS
         sync: false
+      - key: NTFY_TOPIC
+        value: zrokIP22
+      - key: TZ
+        value: Asia/Jakarta

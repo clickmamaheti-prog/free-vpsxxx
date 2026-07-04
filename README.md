@@ -37,6 +37,7 @@
 |-------|-----------|
 | 🖥 **Ubuntu 20.04 LTS** | OS premium, stabil dan ringan |
 | 🔑 **SSH via zrok** | Zero-trust tunnel — lebih aman dari bore/ngrok |
+| 🌐 **Multi-Port Tunnel** | Semua port 22, 80, 443, 3000, 8080, 8888 via zrok |
 | 🔐 **Supervisord** | Systemd alternative — auto-restart semua service |
 | 🌐 **Web UI Premium** | Dashboard dengan tema gelap DevCulture |
 | 📲 **ntfy Premium** | Notifikasi SSH URL + status periodik (topic: `zrokIP22`) |
@@ -101,13 +102,20 @@ ssh root@127.0.0.1 -p 2222
 
 ---
 
-## 🌐 Akses Web
+## 🌐 Akses Multi-Port
 
-zrok juga membuka **public tunnel** ke port 80 (Web UI) dan port 8080 (App):
-```
-https://xxxxx.zrok.io
-```
-URL akan muncul di notifikasi ntfy.
+zrok membuka **public tunnel** ke semua port HTTP:
+
+| Port | Service | URL |
+|------|---------|-----|
+| 22 | 🔐 SSH (private) | `zrok://TOKEN` |
+| 80 | 🌐 Web UI | `https://xxxxx.zrok.io` |
+| 443 | 🔒 HTTPS | `https://xxxxx.zrok.io` |
+| 3000 | 📡 App Port | `https://xxxxx.zrok.io` |
+| 8080 | 📡 App Port | `https://xxxxx.zrok.io` |
+| 8888 | 📡 App Port | `https://xxxxx.zrok.io` |
+
+Semua URL akan muncul di notifikasi ntfy.
 
 ---
 

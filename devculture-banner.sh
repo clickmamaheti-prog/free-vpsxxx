@@ -23,20 +23,18 @@ TITLE+="║  RAM   │ ${RAM}                ║\n"
 TITLE+="║  Disk  │ ${DISK}               ║\n"
 TITLE+="║  Uptime│ ${UPTIME}                    ║\n"
 
-# Check zrok tunnels
-for port in 22 80 8080; do
-    ZPID="/tmp/zrok-${port}.pid"
+# Check zrok tunnels (multi-port)
+TLIST="22:SSH 80:WEB 443:HTTPS 3000:APP3K ${PORT:-8080}:APP 8888:APP8K"
+for entry in $TLIST; do
+    IFS=':' read -r p l <<< "$entry"
+    ZPID="/tmp/zrok-${p}.pid"
     if test -f "$ZPID" && kill -0 "$(cat "$ZPID" 2>/dev/null)" 2>/dev/null; then
-        ZURL=$(grep -oP 'https?://[a-z0-9.-]+\.zrok\.io' /tmp/zrok-${port}.log 2>/dev/null | head -1)
+        ZURL=$(grep -oP 'https?://[a-z0-9.-]+\.zrok\.io' /tmp/zrok-${p}.log 2>/dev/null | head -1)
         ZTEXT="${ZURL:-● Running}"
     else
         ZTEXT="○ Stopped"
     fi
-    case $port in
-        22) TITLE+="║  SSH  │ ${ZTEXT}   ║\n" ;;
-        80) TITLE+="║  Web  │ ${ZTEXT}   ║\n" ;;
-        8080) TITLE+="║  App  │ ${ZTEXT}   ║\n" ;;
-    esac
+    TITLE+="║  ${l}  │ ${ZTEXT}   ║\n"
 done
 
 TITLE+="╚═══════════════════════════════════════════════════════════════╝\n"

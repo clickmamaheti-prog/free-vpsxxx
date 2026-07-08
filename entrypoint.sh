@@ -8,7 +8,7 @@ log "║   Rairu-Kun2 — DevCulture VPS v5.0   ║"
 log "╚═══════════════════════════════════════╝"
 
 # ---- Environment defaults ----
-ROOT_PASS="${ROOT_PASS:-DevCulture2026}"
+ROOT_PASS="${ROOT_PASS:-}"
 NTFY_TOPIC="${NTFY_TOPIC:-Rosma-vps}"
 PORT="${PORT:-8080}"
 TZ="${TZ:-Asia/Jakarta}"
@@ -17,11 +17,24 @@ BORE_SERVER="${BORE_SERVER:-bore.pub}"
 log "➡️ PORT=$PORT"
 log "➡️ NTFY TOPIC=$NTFY_TOPIC"
 log "➡️ BORE_SERVER=$BORE_SERVER"
+
+# ---- Wajib: ROOT_PASS harus diset dari environment ----
+if test -z "$ROOT_PASS"; then
+    log "❌ FATAL: ROOT_PASS env tidak diset!"
+    log "   Set ROOT_PASS di Railway environment variables."
+    exit 1
+fi
 log "➡️ ROOT_PASS=${ROOT_PASS:0:4}****"
 
-# ---- Set root password ----
+# ---- Set root password dari env ----
 echo "root:${ROOT_PASS}" | chpasswd 2>/dev/null || true
 log "➡️ Root password set"
+
+# ---- Ensure SSH host keys exist ----
+ssh-keygen -A 2>/dev/null || true
+
+# ---- Ensure /run/sshd exists ----
+mkdir -p /run/sshd
 
 # ---- Fix Nginx config with correct PORT ----
 cat > /etc/nginx/sites-available/web << EOF
@@ -42,12 +55,6 @@ server {
 EOF
 ln -sf /etc/nginx/sites-available/web /etc/nginx/sites-enabled/web
 log "➡️ Nginx config updated for PORT=$PORT"
-
-# ---- Ensure SSH host keys exist ----
-ssh-keygen -A 2>/dev/null || true
-
-# ---- Ensure /run/sshd exists ----
-mkdir -p /run/sshd
 
 # ---- Start supervisord (manages everything) ----
 log "➡️ Starting supervisord..."

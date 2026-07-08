@@ -11,10 +11,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
+      - name: Trigger Railway Deployment via API
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service "Rairu-Kun2" --detach
+        run: |
+          echo "Triggering Railway deployment..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://backboard.railway.app/graphql/v2" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": "mutation { serviceInstanceDeploy(serviceId: \"a669f50c-0bcf-4b5d-89e8-5de970539c7e\", environmentId: \"9f57285f-a7aa-4b41-bc5a-0d7e5362a220\") }"
+            }')
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -1)
+          echo "Response: $BODY"
+          echo "HTTP Code: $HTTP_CODE"
+          if echo "$BODY" | grep -q '"serviceInstanceDeploy":true'; then
+            echo "✅ Railway deployment triggered successfully!"
+          else
+            echo "❌ Deployment trigger failed"
+            exit 1
+          fi

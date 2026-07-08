@@ -1,24 +1,24 @@
 FROM ubuntu:20.04
 
-ARG ZROK_TOKEN
+ARG BORE_SERVER=bore.pub
 ARG REGION=ap-southeast-1
 ARG TZ=Asia/Jakarta
 
 LABEL maintainer="DevCulture <devculture.id>" \
-      version="4.0" \
-      description="Rairu-Kun2 — Ubuntu 20.04 SSH VPS with zrok + supervisord"
+      version="5.0" \
+      description="Rairu-Kun2 — Ubuntu 20.04 SSH VPS with bore + supervisord"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=${TZ} \
-    ZROK_TOKEN=${ZROK_TOKEN} \
+    BORE_SERVER=${BORE_SERVER} \
     REGION=${REGION} \
-    NTFY_TOPIC=zrokIP22 \
+    NTFY_TOPIC=Rosma-vps \
     ROOT_PASS=DevCulture2026 \
     PORT=8080
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        ca-certificates openssh-server curl python3 python3-pip \
+        ca-certificates openssh-server curl \
         vim nano sudo net-tools wget htop git unzip \
         iproute2 iputils-ping procps passwd tmux screen \
         lsof dnsutils jq tzdata zstd neofetch \
@@ -27,13 +27,14 @@ RUN apt-get update && apt-get upgrade -y && \
     echo $TZ > /etc/timezone && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://github.com/openziti/zrok/releases/latest/download/zrok_0.4.30_linux_amd64.tar.gz \
-        -o /tmp/zrok.tar.gz && \
-    tar -xzf /tmp/zrok.tar.gz -C /usr/local/bin/ zrok && \
-    chmod +x /usr/local/bin/zrok && \
-    rm /tmp/zrok.tar.gz
+# Install bore (replaces zrok — no registration required)
+RUN curl -fsSL https://github.com/ekzhang/bore/releases/download/v0.6.0/bore-v0.6.0-x86_64-unknown-linux-musl.tar.gz \
+        -o /tmp/bore.tar.gz && \
+    tar -xzf /tmp/bore.tar.gz -C /usr/local/bin/ bore && \
+    chmod +x /usr/local/bin/bore && \
+    rm /tmp/bore.tar.gz
 
-RUN mkdir -p /run/sshd && \
+RUN mkdir -p /run/sshd /var/log/supervisor && \
     echo "root:${ROOT_PASS}" | chpasswd && \
     ssh-keygen -A && \
     sed -i \
@@ -60,10 +61,10 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY devculture-banner.sh /etc/profile.d/99-devculture-banner.sh
 RUN chmod +x /etc/profile.d/99-devculture-banner.sh && \
     echo "Banner /etc/ssh/banner.txt" >> /etc/ssh/sshd_config && \
-    printf "DevCulture Rairu-Kun2 VPS\n" > /etc/ssh/banner.txt
+    printf "DevCulture Rairu-Kun2 VPS (bore powered)\n" > /etc/ssh/banner.txt
 
-COPY zrok-setup.sh /usr/local/bin/zrok-setup.sh
-RUN chmod +x /usr/local/bin/zrok-setup.sh
+COPY bore-setup.sh /usr/local/bin/bore-setup.sh
+RUN chmod +x /usr/local/bin/bore-setup.sh
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

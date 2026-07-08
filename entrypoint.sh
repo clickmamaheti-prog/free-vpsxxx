@@ -4,19 +4,19 @@ set -e
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
 log "╔═══════════════════════════════════════╗"
-log "║   Rairu-Kun2 — DevCulture VPS v4.0   ║"
+log "║   Rairu-Kun2 — DevCulture VPS v5.0   ║"
 log "╚═══════════════════════════════════════╝"
 
 # ---- Environment defaults ----
 ROOT_PASS="${ROOT_PASS:-DevCulture2026}"
-NTFY_TOPIC="${NTFY_TOPIC:-zrokIP22}"
+NTFY_TOPIC="${NTFY_TOPIC:-Rosma-vps}"
 PORT="${PORT:-8080}"
 TZ="${TZ:-Asia/Jakarta}"
-ZROK_TOKEN="${ZROK_TOKEN:-}"
+BORE_SERVER="${BORE_SERVER:-bore.pub}"
 
 log "➡️ PORT=$PORT"
 log "➡️ NTFY TOPIC=$NTFY_TOPIC"
-log "➡️ ZROK_TOKEN=${ZROK_TOKEN:+✅ configured}${ZROK_TOKEN:-❌ NOT SET}"
+log "➡️ BORE_SERVER=$BORE_SERVER"
 log "➡️ ROOT_PASS=${ROOT_PASS:0:4}****"
 
 # ---- Set root password ----
@@ -40,7 +40,14 @@ server {
     }
 }
 EOF
+ln -sf /etc/nginx/sites-available/web /etc/nginx/sites-enabled/web
 log "➡️ Nginx config updated for PORT=$PORT"
+
+# ---- Ensure SSH host keys exist ----
+ssh-keygen -A 2>/dev/null || true
+
+# ---- Ensure /run/sshd exists ----
+mkdir -p /run/sshd
 
 # ---- Start supervisord (manages everything) ----
 log "➡️ Starting supervisord..."

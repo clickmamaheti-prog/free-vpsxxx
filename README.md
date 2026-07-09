@@ -1,29 +1,28 @@
 <div align="center">
 
 ```
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║    ██████╗  █████╗ ██╗██████╗ ██╗   ██╗   ██╗  ██╗██╗   ██╗███╗   ██╗ ║
-║    ██╔══██╗██╔══██╗██║██╔══██╗██║   ██║   ██║ ██╔╝██║   ██║████╗  ██║ ║
-║    ██████╔╝███████║██║██║  ██║██║   ██║   █████╔╝ ██║   ██║██╔██╗ ██║ ║
-║    ██╔══██╗██╔══██║██║██║  ██║██║   ██║   ██╔═██╗ ██║   ██║██║╚██╗██║ ║
-║    ██║  ██║██║  ██║██║██████╔╝╚██████╔╝██╗██║  ██╗╚██████╔╝██║ ╚████║ ║
-║    ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ║
-║                                                              ║
-║              ★  RAIRU-KUN2 PREMIUM VPS  ★                   ║
-╚═══════════════════════════════════════════════════════════════╝
-              powered by: DevCulture ©2026 linux
+  ╔══════════════════════════════════════════════════════╗
+  ║  ┌──────────────────────────────────────────────┐   ║
+  ║  │  ██████╗ ███████╗██╗   ██╗ ██████╗           │   ║
+  ║  │  ██╔══██╗██╔════╝██║   ██║██╔════╝           │   ║
+  ║  │  ██║  ██║█████╗  ██║   ██║██║                │   ║
+  ║  │  ██║  ██║██╔══╝  ╚██╗ ██╔╝██║                │   ║
+  ║  │  ██████╔╝███████╗ ╚████╔╝ ╚██████╗  PRO ✦   │   ║
+  ║  │  ╚═════╝ ╚══════╝  ╚═══╝   ╚═════╝           │   ║
+  ║  │       C U L T U R E  —  P R E M I U M  V P S │   ║
+  ║  └──────────────────────────────────────────────┘   ║
+  ╚══════════════════════════════════════════════════════╝
 ```
 
-# Rairu-Kun2 — Premium SSH VPS via zrok Tunnel
+# DevCulture Pro — Premium SSH VPS via bore Tunnel
 
-**Ubuntu 20.04 · zrok Zero-Trust Tunnel · Multi-Port · Railway · ntfy Premium**
+**Ubuntu 20.04 · bore Tunnel · Multi-Port · Railway · ntfy Notifications**
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new)
 [![Deploy on Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04_LTS-E95420?logo=ubuntu&logoColor=white)
-![zrok](https://img.shields.io/badge/zrok-Tunnel-00e5ff?logo=ziti&logoColor=white)
+![bore](https://img.shields.io/badge/bore-Tunnel-00e5ff?logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-00e5ff)
 
@@ -35,21 +34,23 @@
 
 | Fitur | Keterangan |
 |-------|-----------|
-| 🖥 **Ubuntu 20.04 LTS** | OS premium, stabil dan ringan |
-| 🔑 **SSH via zrok** | Zero-trust tunnel — lebih aman dari bore/ngrok |
-| 🌐 **Multi-Port Tunnel** | Semua port 22, 80, 443, 3000, 8080, 8888 via zrok |
-| 🔐 **Supervisord** | Systemd alternative — auto-restart semua service |
-| 🌐 **Web UI Premium** | Dashboard dengan tema gelap DevCulture |
-| 📲 **ntfy Premium** | Notifikasi SSH URL + status periodik (topic: `zrokIP22`) |
-| 🔄 **zrok Tunnel** | Auto-restart jika tunnel mati |
-| 🐳 **Docker Ready** | Deploy ke Railway, Render, Fly.io, atau VPS |
-| 🆓 **100% Gratis** | Railway $5/bulan credit, semua tools gratis |
+| 🖥 **Ubuntu 20.04 LTS** | OS stabil, ringan, production-ready |
+| 🚇 **bore Tunnel** | TCP tunnel publik — tanpa registrasi, tanpa token |
+| 🌐 **Multi-Port** | Tunnel otomatis untuk port 22 (SSH), APP, dan 3000 |
+| 🔐 **Supervisord** | Auto-restart semua service — tidak pernah mati |
+| 📲 **ntfy Notifikasi** | Kirimi alamat SSH + **auto restart notification** ke HP |
+| 🔄 **Watchdog** | Deteksi tunnel mati → restart otomatis → notifikasi ulang |
+| 📊 **Status Berkala** | Update status tiap 5 menit via ntfy |
+| 🌐 **Web UI** | Dashboard built-in via Nginx |
+| 🐳 **Docker Ready** | Deploy ke Railway, Render, Fly.io, Koyeb, atau VPS |
+| 🆓 **100% Gratis** | Railway free credit — tidak perlu kartu kredit |
 
 ---
 
 ## 🚀 Deploy ke Railway
 
 ### 1. Fork repo ini
+
 ### 2. Buat project di [railway.app](https://railway.app)
 New Project → Deploy from GitHub → pilih repo ini
 
@@ -57,137 +58,102 @@ New Project → Deploy from GitHub → pilih repo ini
 
 | Variable | Wajib? | Default | Deskripsi |
 |----------|--------|---------|-----------|
-| `ZROK_TOKEN` | **⚠️ Wajib** | - | Token dari [myzrok.io](https://myzrok.io) |
-| `ROOT_PASS` | Opsional | `DevCulture2026` | Password SSH root |
-| `NTFY_TOPIC` | Opsional | `zrokIP22` | Topic ntfy untuk notifikasi |
+| `ROOT_PASS` | **⚠️ Wajib** | — | Password SSH root (contoh: `MyPass2026!`) |
+| `NTFY_TOPIC` | Opsional | `vps-maill1` | Topic ntfy untuk notifikasi |
+| `BORE_SERVER` | Opsional | `bore.pub` | Server bore tunnel |
 | `TZ` | Opsional | `Asia/Jakarta` | Timezone |
-| `PORT` | Opsional | `8080` | Port web UI |
+| `PORT` | Opsional | `8080` | Port internal web UI |
 
-### 4. Daftar zrok
-1. Buka https://myzrok.io
-2. Register (gratis)
-3. Dapatkan token → set sebagai `ZROK_TOKEN`
+> ⚠️ **`ROOT_PASS` wajib diset** — VPS tidak akan start jika kosong.
 
-### 5. Subscribe ntfy di HP (untuk notifikasi)
+### 4. Subscribe ntfy di HP (untuk notifikasi SSH)
+
 ```
-ntfy.sh/zrokIP22
+https://ntfy.sh/vps-maill1
 ```
+
+Install app ntfy di Android/iOS, subscribe ke topic `vps-maill1`.
 
 ---
 
 ## 🔐 Cara Akses SSH
 
-Karena zrok menggunakan **private tunnel** untuk SSH, kamu perlu:
+Setelah deploy, notifikasi masuk ke **ntfy → `vps-maill1`** dengan alamat:
 
-### Install zrok client (sekali saja)
 ```bash
-# Linux
-curl -fsSL https://github.com/openziti/zrok/releases/latest/download/zrok_0.4.30_linux_amd64.tar.gz \
-  | tar -xz -C /usr/local/bin/ zrok
-
-# macOS
-brew install zrok
+ssh root@bore.pub -p <PORT_DARI_NOTIFIKASI>
+# Password: nilai ROOT_PASS yang kamu set
 ```
 
-### Akses SSH tunnel
-```bash
-# Buka tunnel ke localhost:2222
-zrok access private <TOKEN> --bind 127.0.0.1:2222
-
-# SSH dari terminal lain
-ssh root@127.0.0.1 -p 2222
-```
-
-> **TOKEN** dapat dilihat di notifikasi ntfy (`zrokIP22`) atau di log container.
-
----
-
-## 🌐 Akses Multi-Port
-
-zrok membuka **public tunnel** ke semua port HTTP:
-
-| Port | Service | URL |
-|------|---------|-----|
-| 22 | 🔐 SSH (private) | `zrok://TOKEN` |
-| 80 | 🌐 Web UI | `https://xxxxx.zrok.io` |
-| 443 | 🔒 HTTPS | `https://xxxxx.zrok.io` |
-| 3000 | 📡 App Port | `https://xxxxx.zrok.io` |
-| 8080 | 📡 App Port | `https://xxxxx.zrok.io` |
-| 8888 | 📡 App Port | `https://xxxxx.zrok.io` |
-
-Semua URL akan muncul di notifikasi ntfy.
+> Port berubah setiap kali container restart — selalu cek notifikasi ntfy terbaru.
 
 ---
 
 ## 📲 Notifikasi ntfy
 
-Semua notifikasi dikirim ke topic **`zrokIP22`**:
+Sistem otomatis mengirim notifikasi ke `vps-maill1` pada kondisi:
 
-| Event | Notifikasi |
-|-------|-----------|
-| ⚡ VPS Online | SSH token + Web URL + password |
-| 📊 Status (5 menit) | Uptime, RAM, Disk, Token SSH |
-| 🚨 Tunnel Restart | Alert jika tunnel mati |
+| Event | Kapan |
+|-------|-------|
+| ⚡ **VPS Online** | Pertama kali container start |
+| 🔄 **Auto Restart** | Watchdog restart tunnel yang mati — termasuk info restart ke-N |
+| 📊 **Status Update** | Setiap 5 menit — uptime, RAM, tunnel aktif |
 
-Subscribe: [ntfy.sh/zrokIP22](https://ntfy.sh/zrokIP22)
-
----
-
-## 🏗 Struktur Proyek
-
+Contoh notifikasi restart:
 ```
-rairu-kun2/
-├── Dockerfile                 # Ubuntu 20.04 + zrok + supervisord
-├── entrypoint.sh              # Startup config + supervisord
-├── supervisord.conf           # Process manager (systemd alternative)
-├── zrok-setup.sh              # zrok enable + tunnel manager + ntfy
-├── watchdog.sh                # Service watchdog (SSH, Nginx)
-├── nginx-web.conf              # Nginx config web UI
-├── index.html                 # DevCulture Web UI
-├── devculture-banner.sh       # SSH login banner
-├── render.yaml                # Render deploy config
-├── railway.json               # Railway deploy config
-├── fly.toml                   # Fly.io deploy config
-└── .github/workflows/
-    └── railway-deploy.yml     # Auto-deploy CI/CD
+🔄 DevCulture Pro VPS — AUTO RESTART
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 SSH   : bore.pub:12345
+💡 Cmd   : ssh root@bore.pub -p 12345
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+♻️ Restart : Tunnel SSH(#2) mati → auto restart oleh watchdog
+🤖 Engine  : supervisord + bore watchdog
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 Powered by DevCulture Pro ©2026
 ```
 
 ---
 
-## ⚙️ System Architecture
+## 🌐 Port yang Ditunnel
+
+| Port | Service | Akses |
+|------|---------|-------|
+| `22` | 🔐 SSH | `ssh root@bore.pub -p <PORT>` |
+| `$PORT` | 🌐 Web UI (Nginx) | `http://bore.pub:<PORT>` |
+| `3000` | 📡 App Port | `http://bore.pub:<PORT>` |
+
+---
+
+## ⚙️ Arsitektur Sistem
 
 ```
-┌──────────────────────────────────┐
-│         Supervisord              │
-│  (systemd alternative)           │
-├──────────────────────────────────┤
-│  ┌──────┐ ┌──────┐ ┌──────────┐  │
-│  │ SSH  │ │Nginx │ │ zrok     │  │
-│  │sshd -D│ │:PORT│ │ Tunnel   │  │
-│  └──────┘ └──────┘ │ Manager  │  │
-│                    └──────────┘  │
-│  ┌────────────────────────────┐  │
-│  │ Watchdog                    │  │
-│  │ (auto-restart dead services)│  │
-│  └────────────────────────────┘  │
-└──────────────────────────────────┘
-         │
-    ┌────┴────┐
-    │  zrok   │ ← Zero-trust tunnel
-    │  Cloud  │
-    └─────────┘
-    SSH / HTTPS
+┌──────────────────────────────────────┐
+│         supervisord                  │
+│  (auto-restart semua service)        │
+├──────────────────────────────────────┤
+│  ┌──────┐  ┌───────┐  ┌───────────┐  │
+│  │ sshd │  │ nginx │  │   bore    │  │
+│  │ :22  │  │ :PORT │  │  manager  │  │
+│  └──────┘  └───────┘  └───────────┘  │
+│  ┌──────────────────────────────────┐ │
+│  │ watchdog  (monitor bore PIDs)    │ │
+│  └──────────────────────────────────┘ │
+└──────────────┬───────────────────────┘
+               │ bore tunnel (outbound)
+         ┌─────┴──────┐
+         │  bore.pub  │  ← public TCP relay
+         └────────────┘
+          SSH / HTTP access
 ```
 
 ---
 
 ## ⚠️ Catatan Penting
 
-- **zrok WAJIB** didaftarkan dulu di https://myzrok.io
-- Satu akun zrok free bisa bikin banyak token
-- **Tunnel murni** — VPS + SSH + tunnel, clean tanpa AI
-- Semua service auto-restart via supervisord & watchdog
-- Notifikasi dikirim ke ntfy.sh/zrokIP22
+- **bore port bersifat dinamis** — berubah setiap restart container
+- Watchdog mendeteksi tunnel mati dan **restart otomatis + kirim notifikasi**
+- Tidak perlu registrasi/token apapun untuk bore — langsung jalan
+- Semua service diawasi supervisord → tidak ada yang tidur
 
 ---
 
@@ -195,12 +161,12 @@ rairu-kun2/
 
 **Dibuat dengan ❤️ oleh [DevCulture](https://github.com/clickmamaheti-prog)**
 
-*Premium VPS via zrok · Supervisord Powered*
+*Premium VPS · bore Tunnel · supervisord Powered*
 
 ⭐ **Star repo ini jika membantu!** ⭐
 
 ```
-powered by: DevCulture ©2026 linux
+  powered by: DevCulture Pro ©2026
 ```
 
 </div>

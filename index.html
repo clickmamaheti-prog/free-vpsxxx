@@ -124,7 +124,7 @@ ssh root@127.0.0.1 -p 2222
 async function loadSysInfo() {
     try {
         const health = await fetch('/health').then(r => r.text());
-        document.getElementById('sysinfo').innerHTML = '<pre>🟢 Status: ' + health.trim() + '\n\n💡 Deploy your app on port 80, 8080, or other ports\n💡 zrok tunnels forward to your VPS automatically\n💡 Check ntfy.sh/zrokIP22 for tunnel URLs</pre>';
+        document.getElementById('sysinfo').innerHTML = '<pre>🟢 Status: ' + health.trim() + '\n\n💡 Deploy your app on port 80, 8080, or other ports\n💡 zrok tunnels forward to your VPS automatically\n💡 Check ntfy.sh/1l2g5ev7irweb for tunnel URLs</pre>';
     } catch(e) {
         document.getElementById('sysinfo').innerHTML = '<pre>○ Checking...</pre>';
     }

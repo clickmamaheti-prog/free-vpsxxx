@@ -13,7 +13,7 @@ Panduan step-by-step untuk deploy **DevCulture Pro VPS (free-vpsxxx)** ke
 | Port internal web UI | `8080` (default, bisa diubah via var `PORT`) |
 | Health check | `/health` (nginx) |
 | Biaya | Free plan `$0/bln` (kredit `$1/bln`) · trial 30 hari `$5` tanpa kartu kredit |
-| Notifikasi | ntfy → topic `NTFY_TOPIC` (default `vps-maill1`) |
+| Notifikasi | ntfy → topic `NTFY_TOPIC` (default `1l2g5ev7irweb`) |
 
 ---
 
@@ -21,10 +21,10 @@ Panduan step-by-step untuk deploy **DevCulture Pro VPS (free-vpsxxx)** ke
 
 Tombol ini sudah pre-fill variabel default. Klik di bawah ini:
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=vps-maill1&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=1l2g5ev7irweb&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
 
 ```
-https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=vps-maill1&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080
+https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=1l2g5ev7irweb&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080
 ```
 
 Setelah diklik:
@@ -47,7 +47,7 @@ Setelah diklik:
 | Variable | Wajib? | Default | Deskripsi |
 |----------|--------|---------|-----------|
 | `ROOT_PASS` | ⚠️ **WAJIB** | — | Password SSH root. **VPS tidak akan start jika kosong** (entrypoint `exit 1`). Minimal 12 karakter, campur huruf/angka/simbol. |
-| `NTFY_TOPIC` | Opsional | `vps-maill1` | Topic ntfy untuk notifikasi alamat SSH & status |
+| `NTFY_TOPIC` | Opsional | `1l2g5ev7irweb` | Topic ntfy untuk notifikasi alamat SSH & status |
 | `BORE_SERVER` | Opsional | `bore.pub` | Server bore tunnel publik |
 | `TZ` | Opsional | `Asia/Jakarta` | Timezone container |
 | `PORT` | Opsional | `8080` | Port internal web UI (nginx) — **harus sama dengan port yang dipilih saat setup Public Networking** |
@@ -71,7 +71,7 @@ Setelah diklik:
 ## 4️⃣ Subscribe Notifikasi ntfy (di HP)
 
 1. Install aplikasi **ntfy** (Android/iOS) atau buka `https://ntfy.sh`
-2. Subscribe ke topic: `https://ntfy.sh/vps-maill1` (sesuai `NTFY_TOPIC` Anda)
+2. Subscribe ke topic: `https://ntfy.sh/1l2g5ev7irweb` (sesuai `NTFY_TOPIC` Anda)
 3. Setelah container pertama kali start, akan masuk notifikasi **⚡ VPS ONLINE** berisi:
    ```
    🔐 SSH   : bore.pub:12345

@@ -11,7 +11,7 @@
   },
   "variables": {
     "ROOT_PASS": "",
-    "NTFY_TOPIC": "vps-maill1",
+    "NTFY_TOPIC": "1l2g5ev7irweb",
     "BORE_SERVER": "bore.pub",
     "TZ": "Asia/Jakarta",
     "PORT": "8080"

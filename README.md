@@ -54,7 +54,7 @@
 
 ### 0. Deploy satu-klik (template, var sudah pre-filled) ⭐
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=vps-maill1&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=1l2g5ev7irweb&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
 
 ### 1. Fork repo ini
 
@@ -66,7 +66,7 @@ New Project → Deploy from GitHub → pilih repo ini
 | Variable | Wajib? | Default | Deskripsi |
 |----------|--------|---------|-----------|
 | `ROOT_PASS` | **⚠️ Wajib** | — | Password SSH root (contoh: `MyPass2026!`) |
-| `NTFY_TOPIC` | Opsional | `vps-maill1` | Topic ntfy untuk notifikasi |
+| `NTFY_TOPIC` | Opsional | `1l2g5ev7irweb` | Topic ntfy untuk notifikasi |
 | `BORE_SERVER` | Opsional | `bore.pub` | Server bore tunnel |
 | `TZ` | Opsional | `Asia/Jakarta` | Timezone |
 | `PORT` | Opsional | `8080` | Port internal web UI |
@@ -76,16 +76,16 @@ New Project → Deploy from GitHub → pilih repo ini
 ### 4. Subscribe ntfy di HP (untuk notifikasi SSH)
 
 ```
-https://ntfy.sh/vps-maill1
+https://ntfy.sh/1l2g5ev7irweb
 ```
 
-Install app ntfy di Android/iOS, subscribe ke topic `vps-maill1`.
+Install app ntfy di Android/iOS, subscribe ke topic `1l2g5ev7irweb`.
 
 ---
 
 ## 🔐 Cara Akses SSH
 
-Setelah deploy, notifikasi masuk ke **ntfy → `vps-maill1`** dengan alamat:
+Setelah deploy, notifikasi masuk ke **ntfy → `1l2g5ev7irweb`** dengan alamat:
 
 ```bash
 ssh root@bore.pub -p <PORT_DARI_NOTIFIKASI>
@@ -98,7 +98,7 @@ ssh root@bore.pub -p <PORT_DARI_NOTIFIKASI>
 
 ## 📲 Notifikasi ntfy
 
-Sistem otomatis mengirim notifikasi ke `vps-maill1` pada kondisi:
+Sistem otomatis mengirim notifikasi ke `1l2g5ev7irweb` pada kondisi:
 
 | Event | Kapan |
 |-------|-------|

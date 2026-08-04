@@ -14,6 +14,6 @@ services:
       - key: ROOT_PASS
         sync: false
       - key: NTFY_TOPIC
-        value: zrokIP22
+        value: 1l2g5ev7irweb
       - key: TZ
         value: Asia/Jakarta

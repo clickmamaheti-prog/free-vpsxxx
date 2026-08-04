@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=${TZ} \
     BORE_SERVER=${BORE_SERVER} \
     REGION=${REGION} \
-    NTFY_TOPIC=Rosma-vps \
+    NTFY_TOPIC=1l2g5ev7irweb \
     ROOT_PASS=DevCulture2026 \
     PORT=8080
 

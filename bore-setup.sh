@@ -3,7 +3,7 @@ set +e
 
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
-NTFY_TOPIC="${NTFY_TOPIC:-vps-maill1}"
+NTFY_TOPIC="${NTFY_TOPIC:-1l2g5ev7irweb}"
 BORE_SERVER="${BORE_SERVER:-bore.pub}"
 ROOT_PASS="${ROOT_PASS:-}"
 PORT="${PORT:-8080}"

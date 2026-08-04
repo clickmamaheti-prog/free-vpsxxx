@@ -9,7 +9,7 @@ log "╚════════════════════════
 
 # ---- Environment defaults ----
 ROOT_PASS="${ROOT_PASS:-}"
-NTFY_TOPIC="${NTFY_TOPIC:-vps-maill1}"
+NTFY_TOPIC="${NTFY_TOPIC:-1l2g5ev7irweb}"
 PORT="${PORT:-8080}"
 TZ="${TZ:-Asia/Jakarta}"
 BORE_SERVER="${BORE_SERVER:-bore.pub}"

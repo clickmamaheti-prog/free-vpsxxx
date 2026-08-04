@@ -8,36 +8,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
+      ENVIRONMENT_ID: ${{ vars.RAILWAY_ENVIRONMENT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Skip (bukan gagal) bila RAILWAY_TOKEN belum diset —
-      # agar push tidak menghasilkan check merah sebelum user mengonfigurasi.
-      - name: Cek RAILWAY_TOKEN
-        if: env.RAILWAY_TOKEN == ''
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          echo "⚠️  RAILWAY_TOKEN belum diset — auto-deploy dilewati (tidak gagal)."
-          echo ""
-          echo "Cara mengaktifkan auto-deploy:"
-          echo "  1. Railway → Account Settings → Tokens → Generate (scope: Deploy)"
-          echo "  2. GitHub repo ini → Settings → Secrets and variables → Actions"
-          echo "       Secret     : RAILWAY_TOKEN = <token railway>"
-          echo "       Variables  : RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID"
-          echo "                    (opsional, ID project Railway Anda;"
-          echo "                     bila kosong memakai ID bawaan repo)"
-
       - name: Trigger Railway Deployment via API
-        if: env.RAILWAY_TOKEN != ''
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
-          ENVIRONMENT_ID: ${{ vars.RAILWAY_ENVIRONMENT_ID }}
+        if: env.RAILWAY_TOKEN != '' && env.SERVICE_ID != '' && env.ENVIRONMENT_ID != ''
         run: |
-          SERVICE_ID="${SERVICE_ID:-a669f50c-0bcf-4b5d-89e8-5de970539c7e}"
-          ENVIRONMENT_ID="${ENVIRONMENT_ID:-9f57285f-a7aa-4b41-bc5a-0d7e5362a220}"
           echo "Triggering Railway deployment... service=$SERVICE_ID env=$ENVIRONMENT_ID"
           RESPONSE=$(curl -s -X POST "https://backboard.railway.app/graphql/v2" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
@@ -48,8 +29,19 @@ jobs:
             echo "✅ Railway deployment triggered successfully!"
           else
             echo "❌ Deployment trigger failed: $RESPONSE"
-            echo "   Bila ini project Railway baru, set repository variables"
-            echo "   RAILWAY_SERVICE_ID & RAILWAY_ENVIRONMENT_ID sesuai project Anda"
-            echo "   (lihat DEPLOY_RAILWAY.md → Auto-Deploy)."
             exit 1
           fi
+
+      # Auto-deploy belum dikonfigurasi → skip (bukan gagal), beri petunjuk.
+      - name: Auto-deploy belum dikonfigurasi (skip)
+        if: env.RAILWAY_TOKEN == '' || env.SERVICE_ID == '' || env.ENVIRONMENT_ID == ''
+        run: |
+          echo "ℹ️  Auto-deploy ke Railway belum dikonfigurasi — dilewati (tidak gagal)."
+          echo ""
+          echo "Cara mengaktifkan (setelah project Railway dibuat):"
+          echo "  1. Railway → Account Settings → Tokens → Generate (scope: Deploy)"
+          echo "  2. GitHub repo ini → Settings → Secrets and variables → Actions:"
+          echo "       - Secret    : RAILWAY_TOKEN   = token Railway Anda"
+          echo "       - Variables : RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID"
+          echo "         (dari project Railway Anda — lihat DEPLOY_RAILWAY.md §6)"
+          echo "  3. Push ulang atau jalankan workflow manual (Actions → Run workflow)."

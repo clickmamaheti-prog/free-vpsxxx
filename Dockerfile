@@ -18,7 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        ca-certificates openssh-server curl \
+        ca-certificates openssh-server curl xz-utils \
         vim nano sudo net-tools wget htop git unzip \
         iproute2 iputils-ping procps passwd tmux screen \
         lsof dnsutils jq tzdata zstd neofetch \

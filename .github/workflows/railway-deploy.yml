@@ -3,6 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -11,21 +12,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Trigger Railway Deployment via API
+      # Skip (bukan gagal) bila RAILWAY_TOKEN belum diset —
+      # agar push tidak menghasilkan check merah sebelum user mengonfigurasi.
+      - name: Cek RAILWAY_TOKEN
+        if: env.RAILWAY_TOKEN == ''
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          echo "Triggering Railway deployment..."
+          echo "⚠️  RAILWAY_TOKEN belum diset — auto-deploy dilewati (tidak gagal)."
+          echo ""
+          echo "Cara mengaktifkan auto-deploy:"
+          echo "  1. Railway → Account Settings → Tokens → Generate (scope: Deploy)"
+          echo "  2. GitHub repo ini → Settings → Secrets and variables → Actions"
+          echo "       Secret     : RAILWAY_TOKEN = <token railway>"
+          echo "       Variables  : RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID"
+          echo "                    (opsional, ID project Railway Anda;"
+          echo "                     bila kosong memakai ID bawaan repo)"
+
+      - name: Trigger Railway Deployment via API
+        if: env.RAILWAY_TOKEN != ''
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          SERVICE_ID: ${{ vars.RAILWAY_SERVICE_ID }}
+          ENVIRONMENT_ID: ${{ vars.RAILWAY_ENVIRONMENT_ID }}
+        run: |
+          SERVICE_ID="${SERVICE_ID:-a669f50c-0bcf-4b5d-89e8-5de970539c7e}"
+          ENVIRONMENT_ID="${ENVIRONMENT_ID:-9f57285f-a7aa-4b41-bc5a-0d7e5362a220}"
+          echo "Triggering Railway deployment... service=$SERVICE_ID env=$ENVIRONMENT_ID"
           RESPONSE=$(curl -s -X POST "https://backboard.railway.app/graphql/v2" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{
-              "query": "mutation { serviceInstanceDeploy(serviceId: \"a669f50c-0bcf-4b5d-89e8-5de970539c7e\", environmentId: \"9f57285f-a7aa-4b41-bc5a-0d7e5362a220\") }"
-            }')
+            -d "{\"query\": \"mutation { serviceInstanceDeploy(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\") }\"}")
           echo "Response: $RESPONSE"
           if echo "$RESPONSE" | grep -q '"serviceInstanceDeploy":true'; then
             echo "✅ Railway deployment triggered successfully!"
           else
             echo "❌ Deployment trigger failed: $RESPONSE"
+            echo "   Bila ini project Railway baru, set repository variables"
+            echo "   RAILWAY_SERVICE_ID & RAILWAY_ENVIRONMENT_ID sesuai project Anda"
+            echo "   (lihat DEPLOY_RAILWAY.md → Auto-Deploy)."
             exit 1
           fi

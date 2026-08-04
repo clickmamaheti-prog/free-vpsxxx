@@ -49,6 +49,13 @@
 
 ## 🚀 Deploy ke Railway
 
+> 📘 **Panduan lengkap (env vars, public networking, verifikasi, troubleshooting):**
+> baca [`DEPLOY_RAILWAY.md`](./DEPLOY_RAILWAY.md)
+
+### 0. Deploy satu-klik (template, var sudah pre-filled) ⭐
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=vps-maill1&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
+
 ### 1. Fork repo ini
 
 ### 2. Buat project di [railway.app](https://railway.app)

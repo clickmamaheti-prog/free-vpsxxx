@@ -34,6 +34,18 @@ RUN curl -fsSL https://github.com/ekzhang/bore/releases/download/v0.6.0/bore-v0.
     chmod +x /usr/local/bin/bore && \
     rm /tmp/bore.tar.gz
 
+# Install Node.js 22 LTS + Freebuff CLI (free AI coding agent — no API key needed)
+# User SSH bisa langsung menjalankan perintah `freebuff` di folder project mana pun
+# Heap Node dibatasi agar tidak OOM-kill (exit 137) di container 512MB (Railway/Render free)
+ENV NODE_OPTIONS="--max-old-space-size=320"
+RUN curl -fsSL https://nodejs.org/dist/v22.23.2/node-v22.23.2-linux-x64.tar.xz \
+        -o /tmp/node.tar.xz && \
+    tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 && \
+    rm /tmp/node.tar.xz && \
+    npm install -g --no-fund --no-audit freebuff && \
+    npm cache clean --force && rm -rf /root/.npm && \
+    node --version && freebuff --version
+
 RUN mkdir -p /run/sshd /var/log/supervisor && \
     echo "root:${ROOT_PASS}" | chpasswd && \
     ssh-keygen -A && \

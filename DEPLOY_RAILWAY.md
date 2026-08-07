@@ -15,6 +15,7 @@ Panduan step-by-step untuk deploy **DevCulture Pro VPS (free-vpsxxx)** ke
 | Health check | `/health` (nginx) |
 | Biaya | Free plan `$0/bln` (kredit `$1/bln`) · trial 30 hari `$5` tanpa kartu kredit |
 | Notifikasi | ntfy → topic `NTFY_TOPIC` (**opsional** — kosong = mati) |
+| Log tunnel bore | 📍 **Langsung terlihat di `railway logs`** (perbaikan logging v7.1) — tidak perlu SSH ke container |
 
 ---
 
@@ -85,6 +86,10 @@ Setelah diklik:
 
 ## 4️⃣ Notifikasi ntfy (opsional)
 
+> ℹ️ **Sejak v7.1, alamat tunnel bore dicetak langsung ke log Railway**
+> (`✅ SSH → bore.pub:xxxxx`). Jadi meski ntfy mati/opsional, port SSH tetap
+> bisa dilihat via `railway logs` — tidak perlu SSH ke container.
+
 1. Set `NTFY_TOPIC` ke nilai unik Anda (contoh: `vps-abc123`)
 2. Install aplikasi **ntfy** (Android/iOS) atau buka `https://ntfy.sh/<NTFY_TOPIC-anda>`
 3. Setelah container pertama kali start, akan masuk notifikasi **⚡ VPS ONLINE** berisi:
@@ -103,7 +108,15 @@ Setelah diklik:
    cd /tmp && freebuff  # jalankan di folder project apa pun
    ```
 
-Tanpa `NTFY_TOPIC`: cek alamat via log — `railway logs --lines 200` lalu cari baris `✅ SSH → bore.pub:xxxxx`.
+Tanpa `NTFY_TOPIC`: cek alamat via log — `railway logs --lines 200` lalu cari baris `✅ SSH → bore.pub:xxxxx` (kini tercetak di log bila tunnel berhasil konek).
+
+> ⚠️ **Notifikasi tidak masuk?** Cek log container:
+> - `⚠️ ntfy gagal dikirim` → server `ntfy.sh` sedang tidak terjangkau saat itu
+>   (koneksi timeout). Ini masalah jaringan/uptime ntfy.sh, **bukan** konfigurasi.
+>   Container otomatis mencoba kirim ulang setiap 5 menit (status update) dan
+>   saat restart. Selama ntfy.sh normal, notif akan masuk.
+> - Tidak ada baris `📲 ntfy terkirim` dan tidak ada `⚠️` → cek apakah
+>   `NTFY_TOPIC` benar-benar terset di Variables (kosong = notifikasi mati by design).
 
 ---
 
@@ -112,7 +125,10 @@ Tanpa `NTFY_TOPIC`: cek alamat via log — `railway logs --lines 200` lalu cari 
 - [ ] **Build** sukses di tab Deployments (log berakhir `Successfully built`)
 - [ ] **Container online** (tidak restart-loop)
 - [ ] **Health**: `curl https://<project>.up.railway.app/health` → `OK`
-- [ ] **Log** berisi `✅ SSH → bore.pub:<port>` untuk SSH, APP, dan 3000
+- [ ] **Log** berisi `✅ SSH → bore.pub:<port>` untuk SSH, APP, dan 3000 —
+  cek langsung dengan `railway logs --service <nama> --lines 200`
+  (perbaikan logging v7.1: baris ini kini tercetak di log bila tunnel berhasil konek,
+  tanpa SSH ke container)
 - [ ] **SSH masuk** dengan `ssh root@bore.pub -p <port>`
 - [ ] **`freebuff --version`** jalan di dalam SSH
 
@@ -159,15 +175,22 @@ deployment otomatis setiap push ke `main`. Agar berfungsi:
 |---|---|
 | Build gagal / `exit 137` | RAM container habis saat build (OOM). Heap Node sudah dibatasi `320MB` (`NODE_OPTIONS`). Coba trial plan (1GB RAM) atau kurangi beban. |
 | Container restart-loop | `ROOT_PASS` kosong → entrypoint `exit 1`. Set `ROOT_PASS` di Variables. |
-| Notifikasi ntfy tidak masuk | `NTFY_TOPIC` kosong = notifikasi mati (by design). Set topic unik Anda. |
-| Tidak ada port di log | bore gagal konek ke `bore.pub` (outbound diblokir?). Ganti `BORE_SERVER`. |
+| Notifikasi ntfy tidak masuk | `NTFY_TOPIC` kosong = mati (by design). Atau log menunjukkan `⚠️ ntfy gagal dikirim` = `ntfy.sh` tidak terjangkau saat itu (retry otomatis tiap 5 menit & saat restart). Pastikan perangkat Anda subscribe ke `https://ntfy.sh/<TOPIC>` dan pakai topic unik (jangan `testing12345` publik). |
+| Tidak ada port di log | Bore gagal konek ke `bore.pub` (outbound diblokir?) atau bore-setup belum selesai. Sejak v7.1 log bore dicetak ke `railway logs`; tunggu ±1 menit lalu `railway logs --lines 200`. Kalau tetap tidak ada baris `✅ SSH`, ganti `BORE_SERVER` atau cek `⚠️` di log. |
 | Workflow Actions merah | `RAILWAY_TOKEN` belum diset → workflow otomatis skip (tidak merah). Set secret bila ingin auto-deploy. |
 | `freebuff: command not found` | Build image lama. Redeploy (Deployments → Redeploy) untuk image terbaru. |
+
+## 📝 Changelog
+
+| Versi | Perubahan |
+|---|---|
+| **v7.1** | Perbaikan logging: `bore-setup.sh` menyalin semua log ke stdout container → alamat tunnel (`✅ SSH → bore.pub:<port>`) dan status ntfy (`📲 terkirim` / `⚠️ gagal`) kini terlihat langsung di `railway logs`, tanpa perlu SSH ke container. |
+| v7.0 | Rilis awal panduan & image. |
 
 ---
 
 <div align="center">
 
-**Dibuat oleh Buffy (Freebuff AI)** · `DEPLOY_RAILWAY.md` · v2.0 · Ubuntu 24.04
+**Dibuat oleh Buffy (Freebuff AI)** · `DEPLOY_RAILWAY.md` · v7.1 · Ubuntu 24.04
 
 </div>

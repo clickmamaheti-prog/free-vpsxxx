@@ -121,13 +121,19 @@ ssh root@bore.pub -p <PORT_DARI_NOTIFIKASI>
 # Password: nilai ROOT_PASS yang Anda set
 ```
 
-Cara melihat alamat tanpa ntfy — dari dalam container:
+Cara melihat alamat tanpa ntfy:
 
 ```bash
 docker logs -f free-vpsxxx        # (Docker) cari baris "✅ SSH → bore.pub:xxxxx"
 # atau
-railway logs --lines 200          # (Railway)
+railway logs --lines 200          # (Railway) — SEJAK v7.1, baris ini kini tercetak di log
 ```
+
+> ℹ️ **Sejak v7.1** `bore-setup.sh` menyalin semua log ke stdout container,
+> jadi alamat tunnel (`✅ SSH → bore.pub:<port>`) dan status ntfy
+> (`📲 terkirim` / `⚠️ gagal dikirim`) langsung terlihat di `railway logs`
+> tanpa perlu SSH ke container. Baris `✅ SSH` muncul bila tunnel berhasil
+> konek; kalau gagal, akan ada `⚠️` di log.
 
 > Port bore bersifat **dinamis** — berubah setiap container restart. Selalu cek log/notifikasi terbaru.
 
@@ -146,6 +152,13 @@ Aktifkan dengan set `NTFY_TOPIC` (nilai unik milik Anda, contoh `vps-saya-123abc
 ```bash
 # Di HP: install app ntfy → subscribe https://ntfy.sh/<NTFY_TOPIC-anda>
 ```
+
+> ⚠️ **Notifikasi tidak masuk?** Cek log container (`railway logs --lines 200`):
+> baris `⚠️ ntfy gagal dikirim` berarti server `ntfy.sh` sedang tidak terjangkau
+> saat itu (bukan salah konfigurasi) — container otomatis retry setiap 5 menit
+> dan saat restart. Pastikan juga perangkat Anda sudah subscribe ke topic yang
+> sama, dan gunakan **topic unik** (bukan topic publik seperti `testing12345`
+> yang bisa dilihat orang lain).
 
 ---
 
@@ -200,7 +213,7 @@ Setiap push ke `main`, GitHub Actions otomatis build & push image:
 | File | Fungsi |
 |------|--------|
 | `deploy.sh` | Deploy helper — mode `cli` (Railway CLI) & `ghcr` (Docker) |
-| `bore-setup.sh` | Tunnel manager + watchdog + notifikasi (dijalankan supervisord) |
+| `bore-setup.sh` | Tunnel manager + watchdog + notifikasi (dijalankan supervisord). v7.1+: log disalin ke stdout container → terlihat di `railway logs` |
 | `entrypoint.sh` | Entry point container — set password, konfig nginx, start supervisord |
 | `watchdog.sh` | Restart sshd/nginx bila mati |
 | `devculture-banner.sh` | Banner SSH premium |

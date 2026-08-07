@@ -5,7 +5,7 @@ ARG REGION=ap-southeast-1
 ARG TZ=Asia/Jakarta
 
 LABEL maintainer="DevCulture <devculture.id>" \
-      version="7.0" \
+      version="7.1" \
       description="DevCulture free-vpsxxx — Ubuntu 24.04 SSH VPS with bore tunnel + supervisord"
 
 # NOTE: ROOT_PASS & NTFY_TOPIC deliberately have NO hardcoded default.

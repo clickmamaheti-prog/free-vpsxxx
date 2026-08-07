@@ -4,7 +4,7 @@ set -e
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
 log "╔═══════════════════════════════════════════════╗"
-log "║   DevCulture Pro — Premium VPS v7.0  🚀      ║"
+log "║   DevCulture Pro — Premium VPS v7.1  🚀      ║"
 log "╚═══════════════════════════════════════════════╝"
 
 # ---- Environment defaults ----

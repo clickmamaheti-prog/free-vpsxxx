@@ -1,7 +1,14 @@
 #!/bin/bash
 set +e
 
-log() { echo "[$(date '+%H:%M:%S')] $*"; }
+# Log ke stdout script (masuk /var/log/bore.log via supervisord) DAN
+# salin ke stdout container (PID 1) agar terlihat di log Railway (`railway logs`).
+log() {
+    local line
+    line="[$(date '+%H:%M:%S')] $*"
+    echo "$line"
+    echo "$line" > /proc/1/fd/1 2>/dev/null || true
+}
 
 NTFY_TOPIC="${NTFY_TOPIC:-}"
 BORE_SERVER="${BORE_SERVER:-bore.pub}"

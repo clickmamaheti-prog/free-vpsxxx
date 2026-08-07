@@ -1,19 +1,23 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 ARG BORE_SERVER=bore.pub
 ARG REGION=ap-southeast-1
 ARG TZ=Asia/Jakarta
 
 LABEL maintainer="DevCulture <devculture.id>" \
-      version="5.0" \
-      description="Rairu-Kun2 — Ubuntu 20.04 SSH VPS with bore + supervisord"
+      version="7.0" \
+      description="DevCulture free-vpsxxx — Ubuntu 24.04 SSH VPS with bore tunnel + supervisord"
 
+# NOTE: ROOT_PASS & NTFY_TOPIC deliberately have NO hardcoded default.
+#   - ROOT_PASS  : wajib diset dari environment (entrypoint akan exit 1 jika kosong).
+#   - NTFY_TOPIC : opsional; jika kosong, notifikasi ntfy dimatikan (privasi: jangan
+#                  pakai topic publik bersama agar alamat SSH tidak bocor ke orang lain).
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=${TZ} \
     BORE_SERVER=${BORE_SERVER} \
     REGION=${REGION} \
-    NTFY_TOPIC=1l2g5ev7irweb \
-    ROOT_PASS=DevCulture2026 \
+    NTFY_TOPIC="" \
+    ROOT_PASS="" \
     PORT=8080
 
 RUN apt-get update && apt-get upgrade -y && \
@@ -27,7 +31,7 @@ RUN apt-get update && apt-get upgrade -y && \
     echo $TZ > /etc/timezone && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install bore (replaces zrok — no registration required)
+# Install bore (open-source TCP tunnel — no registration required)
 RUN curl -fsSL https://github.com/ekzhang/bore/releases/download/v0.6.0/bore-v0.6.0-x86_64-unknown-linux-musl.tar.gz \
         -o /tmp/bore.tar.gz && \
     tar -xzf /tmp/bore.tar.gz -C /usr/local/bin/ bore && \
@@ -46,19 +50,21 @@ RUN curl -fsSL https://nodejs.org/dist/v22.23.2/node-v22.23.2-linux-x64.tar.xz \
     npm cache clean --force && rm -rf /root/.npm && \
     node --version && freebuff --version
 
-RUN mkdir -p /run/sshd /var/log/supervisor && \
-    echo "root:${ROOT_PASS}" | chpasswd && \
+RUN mkdir -p /run/sshd /var/log/supervisor /etc/ssh/sshd_config.d && \
     ssh-keygen -A && \
-    sed -i \
-      -e 's/#PermitRootLogin.*/PermitRootLogin yes/' \
-      -e 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' \
-      -e 's/#PasswordAuthentication.*/PasswordAuthentication yes/' \
-      -e 's/PasswordAuthentication no/PasswordAuthentication yes/' \
-      -e 's/#ClientAliveInterval.*/ClientAliveInterval 60/' \
-      -e 's/#ClientAliveCountMax.*/ClientAliveCountMax 10/' \
-      -e 's/#MaxSessions.*/MaxSessions 50/' \
-      -e 's/#TCPKeepAlive.*/TCPKeepAlive yes/' \
-      /etc/ssh/sshd_config
+    # SSH hardening via drop-in (Ubuntu 24.04 memuat /etc/ssh/sshd_config.d/*.conf —
+    # setting pertama yang menang, jadi drop-in ini menimpa nilai bawaan)
+    printf '%s\n' \
+      'PermitRootLogin yes' \
+      'PasswordAuthentication yes' \
+      'PermitEmptyPasswords no' \
+      'MaxAuthTries 4' \
+      'LoginGraceTime 30' \
+      'ClientAliveInterval 60' \
+      'ClientAliveCountMax 10' \
+      'MaxSessions 50' \
+      'TCPKeepAlive yes' \
+      'Banner /etc/ssh/banner.txt' > /etc/ssh/sshd_config.d/99-devculture.conf
 
 RUN rm -f /etc/nginx/sites-enabled/default
 COPY nginx-web.conf /etc/nginx/sites-available/web
@@ -72,8 +78,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY devculture-banner.sh /etc/profile.d/99-devculture-banner.sh
 RUN chmod +x /etc/profile.d/99-devculture-banner.sh && \
-    echo "Banner /etc/ssh/banner.txt" >> /etc/ssh/sshd_config && \
-    printf "DevCulture Rairu-Kun2 VPS (bore powered)\n" > /etc/ssh/banner.txt
+    printf "DevCulture free-vpsxxx VPS (bore powered — Ubuntu 24.04)\n" > /etc/ssh/banner.txt
 
 COPY bore-setup.sh /usr/local/bin/bore-setup.sh
 RUN chmod +x /usr/local/bin/bore-setup.sh

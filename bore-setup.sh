@@ -3,14 +3,18 @@ set +e
 
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
-NTFY_TOPIC="${NTFY_TOPIC:-1l2g5ev7irweb}"
+NTFY_TOPIC="${NTFY_TOPIC:-}"
 BORE_SERVER="${BORE_SERVER:-bore.pub}"
 ROOT_PASS="${ROOT_PASS:-}"
 PORT="${PORT:-8080}"
 
 log "=== DEVCULTURE PRO — BORE TUNNEL MANAGER ==="
 log "Server: $BORE_SERVER"
-log "ntfy topic: $NTFY_TOPIC"
+if test -n "$NTFY_TOPIC"; then
+    log "ntfy topic: $NTFY_TOPIC"
+else
+    log "ntfy: disabled (set NTFY_TOPIC untuk notifikasi alamat SSH)"
+fi
 
 # Ports to tunnel: port:label
 PORTS=(
@@ -38,20 +42,19 @@ start_tunnel() {
     sleep 1
 
     # Clear old log
-    > "$logf"
+    : > "$logf"
 
     log "  🚇 bore local $port → $BORE_SERVER ($label)"
     bore local "$port" --to "$BORE_SERVER" >> "$logf" 2>&1 &
     local pid=$!
     echo "$pid" > "$pidf"
 
-    # Wait up to 30s for bore to output the remote address
+    # Wait up to 30s for bore to print the remote address.
+    # Output examples: "Forwarded TCP traffic from bore.pub:12345 to localhost:22"
     local remote_port=""
-    for i in $(seq 1 15); do
+    for _ in $(seq 1 15); do
         sleep 2
-        remote_port=$(grep -oP "listening at ${BORE_SERVER}:\K[0-9]+" "$logf" 2>/dev/null | head -1)
-        test -n "$remote_port" && break
-        remote_port=$(grep -oP "${BORE_SERVER}:\K[0-9]+" "$logf" 2>/dev/null | head -1)
+        remote_port=$(grep -oE "${BORE_SERVER}:[0-9]+" "$logf" 2>/dev/null | head -1 | grep -oE '[0-9]+$')
         test -n "$remote_port" && break
     done
 
@@ -68,6 +71,12 @@ start_tunnel() {
 
 send_ntfy() {
     local title="$1" priority="$2" msg="$3"
+
+    # ntfy opsional: jika NTFY_TOPIC kosong, jangan kirim apa pun.
+    if test -z "$NTFY_TOPIC"; then
+        return 0
+    fi
+
     curl -s --max-time 15 -X POST "https://ntfy.sh/${NTFY_TOPIC}" \
         -H "Title: $title" \
         -H "Priority: $priority" \

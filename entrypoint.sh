@@ -4,18 +4,22 @@ set -e
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
 log "╔═══════════════════════════════════════════════╗"
-log "║   DevCulture Pro — Premium VPS v6.0  🚀      ║"
+log "║   DevCulture Pro — Premium VPS v7.0  🚀      ║"
 log "╚═══════════════════════════════════════════════╝"
 
 # ---- Environment defaults ----
 ROOT_PASS="${ROOT_PASS:-}"
-NTFY_TOPIC="${NTFY_TOPIC:-1l2g5ev7irweb}"
+NTFY_TOPIC="${NTFY_TOPIC:-}"
 PORT="${PORT:-8080}"
 TZ="${TZ:-Asia/Jakarta}"
 BORE_SERVER="${BORE_SERVER:-bore.pub}"
 
 log "➡️  PORT=$PORT"
-log "➡️  NTFY TOPIC=$NTFY_TOPIC"
+if test -n "$NTFY_TOPIC"; then
+    log "➡️  NTFY TOPIC=$NTFY_TOPIC"
+else
+    log "➡️  NTFY TOPIC=(disabled — set NTFY_TOPIC untuk notifikasi)"
+fi
 log "➡️  BORE_SERVER=$BORE_SERVER"
 
 # ---- Wajib: ROOT_PASS harus diset dari environment ----

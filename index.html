@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rairu-Kun2 · DevCulture VPS</title>
+<title>free-vpsxxx · DevCulture VPS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -43,7 +43,7 @@ body {
 .section h2 span { color: #667eea; }
 .code-block {
     background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px; padding: 16px; 
+    border-radius: 12px; padding: 16px;
 }
 .code-block pre { font-size: 13px; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
 .footer { text-align: center; padding: 20px; color: #4a5568; font-size: 12px; }
@@ -55,8 +55,8 @@ body {
 <body>
 <div class="container">
     <div class="header">
-        <h1>✦ Rairu-Kun2</h1>
-        <p>DevCulture Premium VPS · Ubuntu 20.04 · zrok Tunnel</p>
+        <h1>✦ free-vpsxxx</h1>
+        <p>DevCulture Premium VPS · Ubuntu 24.04 · bore Tunnel</p>
         <span class="badge">⚡ Powered by DevCulture ©2026</span>
     </div>
 
@@ -64,17 +64,17 @@ body {
         <div class="card">
             <div class="icon">🖥</div>
             <div class="label">System</div>
-            <div class="value">Ubuntu 20.04</div>
+            <div class="value">Ubuntu 24.04</div>
         </div>
         <div class="card">
             <div class="icon">🔐</div>
             <div class="label">SSH Access</div>
-            <div class="value online">via zrok</div>
+            <div class="value online">via bore</div>
         </div>
         <div class="card">
             <div class="icon">🌐</div>
             <div class="label">Ports Tunneled</div>
-            <div class="value online">6 via zrok ✓</div>
+            <div class="value online">3 via bore ✓</div>
         </div>
         <div class="card">
             <div class="icon">📡</div>
@@ -84,24 +84,20 @@ body {
     </div>
 
     <div class="section">
-        <h2>🔧 <span>Multi-Port Access</span> (6 port via zrok)</h2>
+        <h2>🔧 <span>Multi-Port Access</span> (via bore tunnel)</h2>
         <div class="code-block">
             <pre>
-# All ports tunneled via zrok:
+# Ports tunneled via bore (TCP, tanpa registrasi/token):
 ┌────────┬──────────┬──────────┐
 │ Port   │ Service  │ Tunnel   │
 ├────────┼──────────┼──────────┤
-│ 22     │ SSH      │ private  │
-│ 80     │ Web UI   │ public   │
-│ 443    │ HTTPS    │ public   │
+│ 22     │ SSH      │ public   │
+│ $PORT  │ Web UI   │ public   │
 │ 3000   │ App      │ public   │
-│ 8080   │ App      │ public   │
-│ 8888   │ App      │ public   │
 └────────┴──────────┴──────────┘
 
-# SSH Access (port 22 — private tunnel):
-zrok access private &lt;token&gt; --bind 127.0.0.1:2222
-ssh root@127.0.0.1 -p 2222
+# SSH Access — alamat & port dikirim via notifikasi ntfy (jika NTFY_TOPIC diset):
+ssh root@bore.pub -p &lt;PORT_DARI_NOTIFIKASI&gt;
 # Password: (set via ROOT_PASS env)</pre>
         </div>
     </div>
@@ -114,9 +110,9 @@ ssh root@127.0.0.1 -p 2222
     </div>
 
     <div class="footer">
-        <span class="status-dot online"></span> System Online · 
-        <a href="https://github.com/clickmamaheti-prog/rairu-kun2" target="_blank">GitHub</a> ·
-        powered by DevCulture ©2026 linux
+        <span class="status-dot online"></span> System Online ·
+        <a href="https://github.com/clickmamaheti-prog/free-vpsxxx" target="_blank">GitHub</a> ·
+        powered by DevCulture ©2026
     </div>
 </div>
 
@@ -124,7 +120,7 @@ ssh root@127.0.0.1 -p 2222
 async function loadSysInfo() {
     try {
         const health = await fetch('/health').then(r => r.text());
-        document.getElementById('sysinfo').innerHTML = '<pre>🟢 Status: ' + health.trim() + '\n\n💡 Deploy your app on port 80, 8080, or other ports\n💡 zrok tunnels forward to your VPS automatically\n💡 Check ntfy.sh/1l2g5ev7irweb for tunnel URLs</pre>';
+        document.getElementById('sysinfo').innerHTML = '<pre>🟢 Status: ' + health.trim() + '\n\n💡 Deploy your app on port 3000, atau port 8080 (nginx)\n💡 bore tunnels forward to your VPS automatically\n💡 Set NTFY_TOPIC untuk notifikasi alamat SSH via ntfy</pre>';
     } catch(e) {
         document.getElementById('sysinfo').innerHTML = '<pre>○ Checking...</pre>';
     }

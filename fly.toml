@@ -1,4 +1,4 @@
-app = "rairu-kun2"
+app = "free-vpsxxx"
 primary_region = "sin"
 
 [build]
@@ -6,7 +6,6 @@ primary_region = "sin"
 
 [env]
   PORT = "8080"
-  NTFY_TOPIC = "1l2g5ev7irweb"
   TZ = "Asia/Jakarta"
 
 [[services]]

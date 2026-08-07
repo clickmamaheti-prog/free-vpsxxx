@@ -55,7 +55,7 @@ echo -e "${BCY}  ║${RS}  ${DM}└───────────────
 echo -e "${BCY}  ╠══════════════════════════════════════════════════════╣${RS}"
 echo -e "${BCY}  ║${RS}                                                      ${BCY}║${RS}"
 echo -e "${BCY}  ║${RS}   ${YL}◈  SYSTEM${RS}                                          ${BCY}║${RS}"
-echo -e "${BCY}  ║${RS}   ${DM}├─${RS} ${CY}OS    ${RS}: ${WH}Ubuntu 20.04 LTS${RS}                          ${BCY}║${RS}"
+echo -e "${BCY}  ║${RS}   ${DM}├─${RS} ${CY}OS    ${RS}: ${WH}Ubuntu 24.04 LTS${RS}                          ${BCY}║${RS}"
 echo -e "${BCY}  ║${RS}   ${DM}├─${RS} ${CY}RAM   ${RS}: ${WH}${RAM}${RS}"
 echo -e "${BCY}  ║${RS}   ${DM}├─${RS} ${CY}Disk  ${RS}: ${WH}${DISK}${RS}"
 echo -e "${BCY}  ║${RS}   ${DM}├─${RS} ${CY}Uptime${RS}: ${WH}${UPTIME}${RS}"

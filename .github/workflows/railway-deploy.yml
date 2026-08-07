@@ -20,7 +20,7 @@ jobs:
         if: env.RAILWAY_TOKEN != '' && env.SERVICE_ID != '' && env.ENVIRONMENT_ID != ''
         run: |
           echo "Triggering Railway deployment... service=$SERVICE_ID env=$ENVIRONMENT_ID"
-          RESPONSE=$(curl -s -X POST "https://backboard.railway.app/graphql/v2" \
+          RESPONSE=$(curl -s -X POST "https://backboard.railway.com/graphql/v2" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"query\": \"mutation { serviceInstanceDeploy(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\") }\"}")

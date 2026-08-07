@@ -12,6 +12,7 @@ on:
       - 'entrypoint.sh'
       - 'watchdog.sh'
       - 'devculture-banner.sh'
+      - 'deploy.sh'
       - '.github/workflows/ghcr-build.yml'
   workflow_dispatch:
 
@@ -42,7 +43,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/clickmamaheti-prog/free-vpsxxx:latest
-            ghcr.io/clickmamaheti-prog/free-vpsxxx:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
           labels: |
-            org.opencontainers.image.source=https://github.com/clickmamaheti-prog/free-vpsxxx
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}

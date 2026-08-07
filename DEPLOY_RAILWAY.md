@@ -9,23 +9,32 @@ Panduan step-by-step untuk deploy **DevCulture Pro VPS (free-vpsxxx)** ke
 
 | Item | Nilai |
 |---|---|
+| OS | **Ubuntu 24.04 LTS** |
 | Builder | Dockerfile (otomatis terdeteksi / dikonfigurasi di `railway.json`) |
 | Port internal web UI | `8080` (default, bisa diubah via var `PORT`) |
 | Health check | `/health` (nginx) |
 | Biaya | Free plan `$0/bln` (kredit `$1/bln`) · trial 30 hari `$5` tanpa kartu kredit |
-| Notifikasi | ntfy → topic `NTFY_TOPIC` (default `1l2g5ev7irweb`) |
+| Notifikasi | ntfy → topic `NTFY_TOPIC` (**opsional** — kosong = mati) |
 
 ---
 
-## 1️⃣ Cara A — Deploy Satu-Klik (Template Button) ⭐
+## 0️⃣ Cara Tercepat — via CLI (`deploy.sh`) ⭐
 
-Tombol ini sudah pre-fill variabel default. Klik di bawah ini:
+Dari repo ini (atau satu-liner tanpa clone):
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=1l2g5ev7irweb&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
-
+```bash
+git clone https://github.com/clickmamaheti-prog/free-vpsxxx.git
+cd free-vpsxxx
+./deploy.sh cli MyStrongPass2026!
 ```
-https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=1l2g5ev7irweb&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080
-```
+
+Script otomatis: cek/install Railway CLI → cek login → `railway up -y` (buat project + service) → set `ROOT_PASS` & `NTFY_TOPIC`.
+
+Tanpa argumen password, script membuatkan password acak yang kuat.
+
+## 1️⃣ Cara A — Deploy Satu-Klik (Template Button)
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2Fclickmamaheti-prog%2Ffree-vpsxxx&var-ROOT_PASS=&var-NTFY_TOPIC=&var-BORE_SERVER=bore.pub&var-TZ=Asia%2FJakarta&var-PORT=8080)
 
 Setelah diklik:
 1. Login / daftar Railway (email atau GitHub — **trial $5, tanpa kartu kredit**)
@@ -35,10 +44,16 @@ Setelah diklik:
 ## 1️⃣ Cara B — Manual via Dashboard
 
 1. Buka [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**
-2. Pilih repo `free-vpsxxx` (pastikan GitHub sudah terhubung; install Railway app di GitHub bila diminta)
+2. Pilih repo `free-vpsxxx`
 3. Railway membaca `railway.json` → memakai **Dockerfile** sebagai builder
 4. Masuk ke project → **Variables** → isi sesuai tabel di bawah
 5. Klik **Deploy** → tunggu build selesai
+
+## 1️⃣ Cara C — Deploy dari Image GHCR
+
+1. **New Project → Deploy from Image**
+2. Image: `ghcr.io/clickmamaheti-prog/free-vpsxxx:latest` (public, tanpa login)
+3. Set variabel (tabel di bawah) → **Deploy**
 
 ---
 
@@ -47,7 +62,7 @@ Setelah diklik:
 | Variable | Wajib? | Default | Deskripsi |
 |----------|--------|---------|-----------|
 | `ROOT_PASS` | ⚠️ **WAJIB** | — | Password SSH root. **VPS tidak akan start jika kosong** (entrypoint `exit 1`). Minimal 12 karakter, campur huruf/angka/simbol. |
-| `NTFY_TOPIC` | Opsional | `1l2g5ev7irweb` | Topic ntfy untuk notifikasi alamat SSH & status |
+| `NTFY_TOPIC` | Opsional | *(kosong)* | Topic ntfy untuk notifikasi alamat SSH & status. **Pakai topic unik milik Anda** — jangan pakai topic publik bersama. |
 | `BORE_SERVER` | Opsional | `bore.pub` | Server bore tunnel publik |
 | `TZ` | Opsional | `Asia/Jakarta` | Timezone container |
 | `PORT` | Opsional | `8080` | Port internal web UI (nginx) — **harus sama dengan port yang dipilih saat setup Public Networking** |
@@ -62,16 +77,16 @@ Setelah diklik:
 1. Buka service → **Settings** (atau tab **Networking**)
 2. **Generate Domain** → pilih port yang di-expose: **pilih `8080`** (sama dengan `PORT` var)
 3. Simpan — web UI dashboard bisa diakses di `https://<project>.up.railway.app`
-4. Health check `/health` akan mengembalikan `DevCulture VPS OK` bila sehat
+4. Health check `/health` akan mengembalikan `OK` bila sehat
 
-> Web UI hanya untuk dashboard. **SSH tetap lewat bore tunnel** (`bore.pub:<port>` dari notifikasi ntfy), bukan lewat domain Railway (port 22 tidak di-expose ke internet oleh Railway).
+> Web UI hanya untuk dashboard. **SSH tetap lewat bore tunnel** (`bore.pub:<port>` dari log/notifikasi ntfy), bukan lewat domain Railway.
 
 ---
 
-## 4️⃣ Subscribe Notifikasi ntfy (di HP)
+## 4️⃣ Notifikasi ntfy (opsional)
 
-1. Install aplikasi **ntfy** (Android/iOS) atau buka `https://ntfy.sh`
-2. Subscribe ke topic: `https://ntfy.sh/1l2g5ev7irweb` (sesuai `NTFY_TOPIC` Anda)
+1. Set `NTFY_TOPIC` ke nilai unik Anda (contoh: `vps-abc123`)
+2. Install aplikasi **ntfy** (Android/iOS) atau buka `https://ntfy.sh/<NTFY_TOPIC-anda>`
 3. Setelah container pertama kali start, akan masuk notifikasi **⚡ VPS ONLINE** berisi:
    ```
    🔐 SSH   : bore.pub:12345
@@ -84,9 +99,11 @@ Setelah diklik:
    ```
 5. Coba coding agent gratis di dalam VPS:
    ```bash
-   freebuff --version   # → 0.0.138 (sudah terpasang)
+   freebuff --version   # AI coding agent (sudah terpasang)
    cd /tmp && freebuff  # jalankan di folder project apa pun
    ```
+
+Tanpa `NTFY_TOPIC`: cek alamat via log — `railway logs --lines 200` lalu cari baris `✅ SSH → bore.pub:xxxxx`.
 
 ---
 
@@ -94,8 +111,8 @@ Setelah diklik:
 
 - [ ] **Build** sukses di tab Deployments (log berakhir `Successfully built`)
 - [ ] **Container online** (tidak restart-loop)
-- [ ] **Health**: `curl https://<project>.up.railway.app/health` → `DevCulture VPS OK`
-- [ ] **Notifikasi ntfy masuk** berisi `bore.pub:<port>` untuk SSH, APP, dan 3000
+- [ ] **Health**: `curl https://<project>.up.railway.app/health` → `OK`
+- [ ] **Log** berisi `✅ SSH → bore.pub:<port>` untuk SSH, APP, dan 3000
 - [ ] **SSH masuk** dengan `ssh root@bore.pub -p <port>`
 - [ ] **`freebuff --version`** jalan di dalam SSH
 
@@ -110,8 +127,10 @@ deployment otomatis setiap push ke `main`. Agar berfungsi:
    atau Project Token dari project Anda
 2. Di GitHub repo: **Settings → Secrets and variables → Actions**:
    - **Secret** `RAILWAY_TOKEN` → tempel token
-   - **Variables** `RAILWAY_SERVICE_ID` & `RAILWAY_ENVIRONMENT_ID` → isi dari URL/API project Railway Anda (opsional; jika kosong memakai ID bawaan repo)
+   - **Variables** `RAILWAY_SERVICE_ID` & `RAILWAY_ENVIRONMENT_ID` → isi dari URL/API project Railway Anda
 3. Push berikutnya ke `main` otomatis deploy. Jika secret belum diset, workflow **skip dengan pesan jelas** (tidak gagal/merah).
+
+> Workflow memanggil endpoint `backboard.railway.com` (GraphQL v2).
 
 ---
 
@@ -127,11 +146,10 @@ deployment otomatis setiap push ke `main`. Agar berfungsi:
 
 > ⚠️ **Penting untuk VPS ini**: fitur sleep otomatis Railway membuat container
 > (dan tunnel bore) mati setelah ±10 menit tidak ada trafik. Akibatnya:
-> - SSH tidak selalu tersedia 24/7 di free tier — bangun kembali saat ada request
-> - Port bore berubah setiap kali container restart → **selalu cek notifikasi ntfy terbaru**
+> - SSH tidak selalu tersedia 24/7 di free tier
+> - Port bore berubah setiap kali container restart → **selalu cek log/notifikasi terbaru**
 >
-> Kalau butuh VPS yang benar-benar selalu online: upgrade ke plan berbayar,
-> atau pantau container tetap bangun dengan ping berkala.
+> Kalau butuh VPS yang benar-benar selalu online: upgrade ke plan berbayar.
 
 ---
 
@@ -140,16 +158,16 @@ deployment otomatis setiap push ke `main`. Agar berfungsi:
 | Gejala | Penyebab & Solusi |
 |---|---|
 | Build gagal / `exit 137` | RAM container habis saat build (OOM). Heap Node sudah dibatasi `320MB` (`NODE_OPTIONS`). Coba trial plan (1GB RAM) atau kurangi beban. |
-| Container restart-loop `EADDRINUSE` | Dua instance jalan bersamaan. Pastikan `numReplicas: 1` dan restart policy `ON_FAILURE`. |
-| Notifikasi ntfy tidak masuk | Cek `NTFY_TOPIC` benar & subscribe di HP; cek log `bore` di tab Deployments. |
-| Tidak ada port di notifikasi | bore gagal konek ke `bore.pub` (outbound diblokir?). Ganti `BORE_SERVER`. |
-| Workflow Actions merah | `RAILWAY_TOKEN` belum diset → workflow otomatis skip (tidak merah lagi setelah fix ini). Set secret bila ingin auto-deploy. |
-| `freebuff: command not found` | Build image lama. Redeploy (Deployments → Redeploy) untuk image terbaru yang sudah berisi Node 22 + Freebuff. |
+| Container restart-loop | `ROOT_PASS` kosong → entrypoint `exit 1`. Set `ROOT_PASS` di Variables. |
+| Notifikasi ntfy tidak masuk | `NTFY_TOPIC` kosong = notifikasi mati (by design). Set topic unik Anda. |
+| Tidak ada port di log | bore gagal konek ke `bore.pub` (outbound diblokir?). Ganti `BORE_SERVER`. |
+| Workflow Actions merah | `RAILWAY_TOKEN` belum diset → workflow otomatis skip (tidak merah). Set secret bila ingin auto-deploy. |
+| `freebuff: command not found` | Build image lama. Redeploy (Deployments → Redeploy) untuk image terbaru. |
 
 ---
 
 <div align="center">
 
-**Dibuat oleh Buffy (Freebuff AI)** · `DEPLOY_RAILWAY.md` · v1.0
+**Dibuat oleh Buffy (Freebuff AI)** · `DEPLOY_RAILWAY.md` · v2.0 · Ubuntu 24.04
 
 </div>

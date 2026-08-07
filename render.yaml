@@ -9,11 +9,9 @@ services:
     envVars:
       - key: PORT
         value: 8080
-      - key: ZROK_TOKEN
-        sync: false
       - key: ROOT_PASS
         sync: false
       - key: NTFY_TOPIC
-        value: 1l2g5ev7irweb
+        value: ""
       - key: TZ
         value: Asia/Jakarta

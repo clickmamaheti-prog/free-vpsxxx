@@ -37,7 +37,7 @@
 |-------|-----------|
 | 🖥 **Ubuntu 24.04 LTS** | OS terbaru, stabil, production-ready |
 | 🚇 **bore Tunnel** | TCP tunnel publik — tanpa registrasi, tanpa token |
-| 🌐 **Multi-Port** | Tunnel otomatis untuk port 22 (SSH), APP, dan 3000 |
+| 🌐 **Multi-Port** | Tunnel otomatis 5 port: 22 (SSH), 80 (HTTP), 443 (HTTPS), 8080 (APP), 3000 |
 | 🔐 **Supervisord** | Auto-restart semua service — tidak pernah mati |
 | 📲 **ntfy Notifikasi (opsional)** | Kirim alamat SSH + auto-restart ke HP — aktifkan dengan `NTFY_TOPIC` |
 | 🔄 **Watchdog** | Deteksi tunnel mati → restart otomatis → notifikasi ulang |
@@ -167,7 +167,9 @@ Aktifkan dengan set `NTFY_TOPIC` (nilai unik milik Anda, contoh `vps-saya-123abc
 | Port | Service | Akses |
 |------|---------|-------|
 | `22` | 🔐 SSH | `ssh root@bore.pub -p <PORT>` |
-| `$PORT` | 🌐 Web UI (Nginx) | `http://bore.pub:<PORT>` |
+| `80` | 🌐 HTTP | `http://bore.pub:<PORT>` |
+| `443` | 🔒 HTTPS | `https://bore.pub:<PORT>` |
+| `$PORT` (8080) | 🌐 Web UI (Nginx) | `http://bore.pub:<PORT>` |
 | `3000` | 📡 App Port | `http://bore.pub:<PORT>` |
 
 ---

@@ -26,6 +26,8 @@ fi
 # Ports to tunnel: port:label
 PORTS=(
     "22:SSH"
+    "80:HTTP"
+    "443:HTTPS"
     "${PORT}:APP"
     "3000:APP3K"
 )

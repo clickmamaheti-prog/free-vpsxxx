@@ -67,7 +67,7 @@ jobs:
           UPDATE=$(curl -s -X POST "https://backboard.railway.com/graphql/v2" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"query\":\"mutation { serviceInstanceUpdate(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\", input: { source: { image: \\\"${IMAGE}\\\" } }) { id } }\"}")
+            -d "{\"query\":\"mutation { serviceInstanceUpdate(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\", input: { source: { image: \\\"${IMAGE}\\\" } }) }\"}")
           echo "Update image: $UPDATE"
           if echo "$UPDATE" | grep -q '"errors"'; then
             echo "❌ Gagal update image service: $UPDATE"

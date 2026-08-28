@@ -31,13 +31,12 @@ if [ -n "${GH_TOKEN:-}" ]; then
     cp -f /tmp/ops-secrets/current/cloudflared/*.json /root/.cloudflared/ 2>/dev/null || true
     # Healthcheck config
     [ -f /tmp/ops-secrets/current/vectorhead-healthcheck.conf ] && install -m 600 /tmp/ops-secrets/current/vectorhead-healthcheck.conf /etc/vectorhead-healthcheck.conf
-    # Landing page statis (landing.jokichannel.eu.org)
+    # Landing page statis (landing.jokichannel.eu.org) — SPA multi-file
     if [ -f /tmp/ops-secrets/current/landing/index.html ]; then
-      mkdir -p /var/www/landing
-      cp -f /tmp/ops-secrets/current/landing/index.html /var/www/landing/ 2>/dev/null || log "⚠️ salin landing gagal"
-      cp -f /tmp/ops-secrets/current/landing/serve.py /var/www/landing/ 2>/dev/null || log "⚠️ salin serve.py gagal"
+      rm -rf /var/www/landing && mkdir -p /var/www/landing
+      cp -rf /tmp/ops-secrets/current/landing/. /var/www/landing/ 2>/dev/null || log "⚠️ salin landing gagal"
       chmod 755 /var/www/landing/serve.py 2>/dev/null
-      log "✅ Landing page siap di /var/www/landing"
+      log "✅ Landing page (SPA) siap di /var/www/landing"
     fi
     # cron dibutuhkan service backup otomatis (tidak ada di base image)
     if ! command -v cron >/dev/null 2>&1 && [ ! -x /usr/sbin/cron ]; then

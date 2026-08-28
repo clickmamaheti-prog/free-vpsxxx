@@ -35,6 +35,8 @@ if [ -n "${GH_TOKEN:-}" ]; then
     if [ -f /tmp/ops-secrets/current/landing/index.html ]; then
       mkdir -p /var/www/landing
       cp -f /tmp/ops-secrets/current/landing/index.html /var/www/landing/ 2>/dev/null || log "⚠️ salin landing gagal"
+      cp -f /tmp/ops-secrets/current/landing/serve.py /var/www/landing/ 2>/dev/null || log "⚠️ salin serve.py gagal"
+      chmod 755 /var/www/landing/serve.py 2>/dev/null
       log "✅ Landing page siap di /var/www/landing"
     fi
     # cron dibutuhkan service backup otomatis (tidak ada di base image)

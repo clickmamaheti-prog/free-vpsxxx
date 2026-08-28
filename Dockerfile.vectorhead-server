@@ -1,0 +1,20 @@
+# ============================================================================
+# VectorHead Server image — base free-vpsxxx + overlay runtime (TANPA secret)
+# ----------------------------------------------------------------------------
+# Image ini PUBLIK (ghcr.io/clickmamaheti-prog/free-vpsxxx-server:latest).
+# Semua konfigurasi berisi secret (password, token, kredensial tunnel) TIDAK
+# di-bake — di-restore otomatis setiap container start oleh
+# docker/vectorhead-entrypoint.sh (clone repo PRIVATE vectorhead-ops via GH_TOKEN).
+# Hasil: container tahan restart tanpa kehilangan setup.
+# ============================================================================
+FROM ghcr.io/clickmamaheti-prog/free-vpsxxx:latest
+
+# Konfigurasi utama supervisord (RPC socket + include /etc/supervisor/conf.d/)
+COPY docker/vectorhead-supervisord.conf /etc/supervisor/supervisord.conf
+
+# Entrypoint overlay: restore ops dari repo private, lalu jalankan base entrypoint
+COPY docker/vectorhead-entrypoint.sh /vectorhead-entrypoint.sh
+RUN chmod +x /vectorhead-entrypoint.sh \
+    && sed -i 's#/etc/supervisor/conf.d/supervisord.conf#/etc/supervisor/supervisord.conf#' /entrypoint.sh
+
+CMD ["/vectorhead-entrypoint.sh"]

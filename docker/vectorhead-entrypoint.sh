@@ -31,6 +31,12 @@ if [ -n "${GH_TOKEN:-}" ]; then
     cp -f /tmp/ops-secrets/current/cloudflared/*.json /root/.cloudflared/ 2>/dev/null || true
     # Healthcheck config
     [ -f /tmp/ops-secrets/current/vectorhead-healthcheck.conf ] && install -m 600 /tmp/ops-secrets/current/vectorhead-healthcheck.conf /etc/vectorhead-healthcheck.conf
+    # cron dibutuhkan service backup otomatis (tidak ada di base image)
+    if ! command -v cron >/dev/null 2>&1 && [ ! -x /usr/sbin/cron ]; then
+      log "Install cron..."
+      apt-get update -qq >/dev/null 2>&1 || true
+      DEBIAN_FRONTEND=noninteractive apt-get install -y -qq cron >/dev/null 2>&1 || log "⚠️ apt install cron gagal"
+    fi
     # Versi vectorhead-ai sesuai version.txt
     VH_VER=$(cat /tmp/ops-secrets/current/version.txt 2>/dev/null || echo "")
     if [ -n "$VH_VER" ]; then

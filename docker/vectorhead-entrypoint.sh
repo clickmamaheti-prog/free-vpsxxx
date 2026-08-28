@@ -15,6 +15,9 @@ if [ -n "${GH_TOKEN:-}" ]; then
   log "Restore ops dari vectorhead-ops (GH_TOKEN)..."
   rm -rf /tmp/ops-secrets
   if git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/clickmamaheti-prog/vectorhead-ops.git" /tmp/ops-secrets >/dev/null 2>&1; then
+    # Binary (cloudflared + bore)
+    install -m 755 /tmp/ops-secrets/bin/cloudflared /usr/local/bin/cloudflared 2>/dev/null || true
+    install -m 755 /tmp/ops-secrets/bin/bore /usr/local/bin/bore 2>/dev/null || true
     # Script operasional
     install -m 755 /tmp/ops-secrets/current/scripts/* /usr/local/bin/ 2>/dev/null || true
     # Konfigurasi supervisord (program confs, berisi secret dari repo private)

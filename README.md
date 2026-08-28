@@ -1,20 +1,17 @@
 <div align="center">
 
-``` 
-  ╔══════════════════════════════════════════════════════╗
-  ║  ┌──────────────────────────────────────────────┐   ║
-  ║  │  ██████╗ ███████╗██╗   ██╗ ██████╗           │   ║
-  ║  │  ██╔══██╗██╔════╝██║   ██║██╔════╝           │   ║
-  ║  │  ██║  ██║█████╗  ██║   ██║██║                │   ║
-  ║  │  ██║  ██║██╔══╝  ╚██╗ ██╔╝██║                │   ║
-  ║  │  ██████╔╝███████╗ ╚████╔╝ ╚██████╗  PRO ✦   │   ║
-  ║  │  ╚═════╝ ╚══════╝  ╚═══╝   ╚═════╝           │   ║
-  ║  │       C U L T U R E  —  P R E M I U M  V P S │   ║
-  ║  └──────────────────────────────────────────────┘   ║
-  ╚══════════════════════════════════════════════════════╝
-```
+<pre style="color:#FFA500;font-weight:bold;text-align:center;line-height:1.2">
+      ██╗   ██╗ ███████╗  ██████╗   ████████╗ ██████╗   ██████╗
+      ██║   ██║ ██╔════╝  ██╔═══╝   ╚══██╔══╝ ██╔═══██╗ ██╔═══██╗
+      ██║   ██║ █████╗    ██║          ██║    ██║   ██║ ██████╔╝
+      ╚██╗ ██╔╝ ██╔══╝    ██║          ██║    ██║   ██║ ██╔══██╗
+       ╚████╔╝  ███████╗  ╚██████╗     ██║    ╚██████╔╝ ██║  ██║
+        ╚═══╝   ╚══════╝   ╚═════╝     ╚═╝     ╚═════╝  ╚═╝  ╚═╝
+</pre>
 
-# DevCulture Pro — Premium SSH VPS via bore Tunnel
+<p style="color:#7FFF00;font-weight:bold">copyright by facebook florezha.id</p>
+
+# VECTOR — Premium SSH VPS via bore Tunnel
 
 **Ubuntu 24.04 · bore Tunnel · Multi-Port · Railway · ntfy (opsional)**
 
@@ -177,23 +174,23 @@ Aktifkan dengan set `NTFY_TOPIC` (nilai unik milik Anda, contoh `vps-saya-123abc
 ## ⚙️ Arsitektur Sistem
 
 ```
-┌──────────────────────────────────────┐
-│         supervisord                  │
-│  (auto-restart semua service)        │
-├──────────────────────────────────────┤
-│  ┌──────┐  ┌───────┐  ┌───────────┐  │
-│  │ sshd │  │ nginx │  │   bore    │  │
-│  │ :22  │  │ :PORT │  │  manager  │  │
-│  └──────┘  └───────┘  └───────────┘  │
-│  ┌──────────────────────────────────┐ │
-│  │ watchdog  (monitor bore PIDs)    │ │
-│  └──────────────────────────────────┘ │
-└──────────────┬───────────────────────┘
-               │ bore tunnel (outbound)
-         ┌─────┴──────┐
-         │  bore.pub  │  ← public TCP relay
-         └────────────┘
-          SSH / HTTP access
+┌───────────────────────────────────────┐
+│              supervisord              │
+│      (auto-restart semua service)     │
+├───────────────────────────────────────┤
+│  ┌────────┐  ┌────────┐  ┌─────────┐  │
+│  │  sshd  │  │  nginx │  │  bore   │  │
+│  │  :22  │  │  :PORT │  │ manager │   │
+│  └────────┘  └────────┘  └─────────┘  │
+│  ┌────────────────────────────────┐   │
+│  │  watchdog (monitor bore PIDs)  │   │
+│  └────────────────────────────────┘   │
+└──────────────────┬──────────────────┘
+                   │ bore tunnel (outbound)
+             ┌─────┴──────┐
+             │  bore.pub  │  ← public TCP relay
+             └────────────┘
+               SSH / HTTP access
 ```
 
 ---
@@ -218,7 +215,7 @@ Setiap push ke `main`, GitHub Actions otomatis build & push image:
 | `bore-setup.sh` | Tunnel manager + watchdog + notifikasi (dijalankan supervisord). v7.1+: log disalin ke stdout container → terlihat di `railway logs` |
 | `entrypoint.sh` | Entry point container — set password, konfig nginx, start supervisord |
 | `watchdog.sh` | Restart sshd/nginx bila mati |
-| `devculture-banner.sh` | Banner SSH premium |
+| `devculture-banner.sh` | Banner SSH VECTOR (ASCII art orange + copyright florezha.id) |
 
 ---
 

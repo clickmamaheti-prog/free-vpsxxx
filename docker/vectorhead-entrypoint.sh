@@ -31,6 +31,12 @@ if [ -n "${GH_TOKEN:-}" ]; then
     cp -f /tmp/ops-secrets/current/cloudflared/*.json /root/.cloudflared/ 2>/dev/null || true
     # Healthcheck config
     [ -f /tmp/ops-secrets/current/vectorhead-healthcheck.conf ] && install -m 600 /tmp/ops-secrets/current/vectorhead-healthcheck.conf /etc/vectorhead-healthcheck.conf
+    # Landing page statis (landing.jokichannel.eu.org)
+    if [ -f /tmp/ops-secrets/current/landing/index.html ]; then
+      mkdir -p /var/www/landing
+      cp -f /tmp/ops-secrets/current/landing/index.html /var/www/landing/ 2>/dev/null || log "⚠️ salin landing gagal"
+      log "✅ Landing page siap di /var/www/landing"
+    fi
     # cron dibutuhkan service backup otomatis (tidak ada di base image)
     if ! command -v cron >/dev/null 2>&1 && [ ! -x /usr/sbin/cron ]; then
       log "Install cron..."

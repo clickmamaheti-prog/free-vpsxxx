@@ -42,3 +42,55 @@ jobs:
             ghcr.io/${{ github.repository }}-server:${{ github.sha }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
+
+  # ── Auto-deploy VPS cadangan vectorhead (Railway project vectorhead-backup) ──
+  # Setelah image baru di-build & di-push, service cadangan otomatis diarahkan
+  # ke image tag SHA lalu di-deploy ulang. Konfigurasi via repo Settings →
+  # Secrets and variables → Actions:
+  #   Secret : RAILWAY_TOKEN_BACKUP
+  #   Vars   : RAILWAY_BACKUP_SERVICE_ID / RAILWAY_BACKUP_ENVIRONMENT_ID
+  # Belum di-set → job skip dengan pesan jelas (tidak gagal/merah).
+  redeploy-vectorhead-backup:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_BACKUP }}
+      SERVICE_ID: ${{ vars.RAILWAY_BACKUP_SERVICE_ID }}
+      ENVIRONMENT_ID: ${{ vars.RAILWAY_BACKUP_ENVIRONMENT_ID }}
+      IMAGE: ghcr.io/${{ github.repository }}-server:${{ github.sha }}
+    steps:
+      - name: Auto-deploy VPS cadangan vectorhead
+        if: env.RAILWAY_TOKEN != '' && env.SERVICE_ID != '' && env.ENVIRONMENT_ID != ''
+        run: |
+          echo "🔄 Auto-deploy VPS cadangan vectorhead → image: $IMAGE"
+          # 1) Arahkan service ke image tag SHA (pasti image baru di-pull, tidak bergantung cache :latest)
+          UPDATE=$(curl -s -X POST "https://backboard.railway.com/graphql/v2" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation { serviceInstanceUpdate(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\", input: { source: { image: \\\"${IMAGE}\\\" } }) { id } }\"}")
+          echo "Update image: $UPDATE"
+          if echo "$UPDATE" | grep -q '"errors"'; then
+            echo "❌ Gagal update image service: $UPDATE"
+            exit 1
+          fi
+          # 2) Trigger deploy
+          RESPONSE=$(curl -s -X POST "https://backboard.railway.com/graphql/v2" \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\":\"mutation { serviceInstanceDeploy(serviceId: \\\"${SERVICE_ID}\\\", environmentId: \\\"${ENVIRONMENT_ID}\\\") }\"}")
+          echo "Deploy: $RESPONSE"
+          if echo "$RESPONSE" | grep -q '"serviceInstanceDeploy":true'; then
+            echo "✅ VPS cadangan vectorhead auto-deployed!"
+          else
+            echo "❌ Gagal trigger deploy: $RESPONSE"
+            exit 1
+          fi
+
+      - name: Auto-deploy belum dikonfigurasi (skip)
+        if: env.RAILWAY_TOKEN == '' || env.SERVICE_ID == '' || env.ENVIRONMENT_ID == ''
+        run: |
+          echo "ℹ️  Auto-deploy VPS cadangan belum dikonfigurasi — dilewati (tidak gagal)."
+          echo "Cara mengaktifkan (Settings → Secrets and variables → Actions):"
+          echo "  - Secret : RAILWAY_TOKEN_BACKUP          = token Railway akun backup"
+          echo "  - Vars   : RAILWAY_BACKUP_SERVICE_ID     = service ID (service vectorhead)"
+          echo "  - Vars   : RAILWAY_BACKUP_ENVIRONMENT_ID = environment ID (production)"
